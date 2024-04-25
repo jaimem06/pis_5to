@@ -16,5 +16,5 @@ NOTA: No hacer commit directamente en `main`.
 
 ## Configuración del proyecto
 
-Para evitar conflictos entre los entornos virtuales, cada uno cambiar la dirección de su proyecto en el archivo `backend/virtual/pyvenv.cfg`.
+Para evitar conflictos entre los entornos virtuales, cada uno cambiar la dirección de su proyecto en el archivo `pyvenv.cfg`
 Igual solo hacer una vez por que ya esta el .gitignore
