@@ -1,0 +1,32 @@
+from app import db
+import uuid
+from datetime import datetime
+from models.cuenta import Cuenta
+
+class Persona(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    external_id = db.Column(db.VARCHAR(60), default=str(uuid.uuid4()))
+    nombre = db.Column(db.String(100))
+    apellido = db.Column(db.String(100))
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+    # Relación uno a uno con cuenta
+    #uselist = False sirve para especificar que una persona solo se relaciona con un objeto cuenta
+    cuenta = db.relationship("Cuenta", backref="persona", uselist=False)
+
+    @property
+    def serialize(self):
+        return {
+            "external_id": self.external_id,
+            "nombre": self.nombre,
+            "apellido": self.apellido,
+        }
+
+    def copy(self):
+        nueva_persona = Persona(
+            id=self.id,
+            nombre=self.nombre,
+            apellido=self.apellido,
+            external_id=self.external_id,
+        )
+        return nueva_persona

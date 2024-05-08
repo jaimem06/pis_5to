@@ -11,6 +11,7 @@ def bad_request(error):
             jsonify({"msg": "Error", "code": 400, "datos": {str(error.description.message): "error"}}),
             400
         )
+        
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

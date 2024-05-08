@@ -14,7 +14,10 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        from routes. api import api
+        from routes.api import api
+        from routes.api_persona import api_persona
+        
+        app.register_blueprint(api_persona)
         app.register_blueprint(api)
         # Creacion de las tablas
         db.create_all()
