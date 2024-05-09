@@ -1,2 +1,4 @@
 pyvenv.cfg
 .env
+virtual
+__pycache__
