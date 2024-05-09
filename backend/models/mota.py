@@ -26,5 +26,6 @@ class Mota(db.Model):
             'updated_at': self.updated_at,
             'estado': self.estado
         }
+    
 
    

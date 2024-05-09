@@ -16,7 +16,6 @@ class MotaControl:
         return Mota.query.filter_by(estado=estado).all()
     
     
-    
     # Metodo para guardar persona
     def guardar(self, data):
         mota = Mota()
