@@ -1,4 +1,8 @@
 .env
 virtual
 __pycache__
-pyvenv.cfg
+virtual/pyvenv.cfg
+config/__pycache__
+controllers/__pycache__
+models/__pycache__
+routes/__pycache__
