@@ -3,7 +3,7 @@
 
 1. Activar el entorno virtual con el comando:
     - Linux: `source backend/virtual/bin/activate`
-    - PowerShell: `. .\backend\virtual\bin\Activate.ps1`
+    - PowerShell: `. .\backend\virtual\scripts\activate`
 
 ## Flujo de trabajo de Git
 
