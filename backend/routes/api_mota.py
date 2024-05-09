@@ -10,12 +10,13 @@ motaC = MotaControl()
 schema_mota = {
     "type": "object",
     "properties": {
-        "tipo": {'type': 'boolean'},
-        'latitud': {'type': 'float'},
-        'longitud': {'type': 'float'},
+        "tipo": {'type': 'string'},
+        'latitud': {'type': 'number'},
+        'longitud': {'type': 'number'},    
         'ip_sensor': {'type': 'string'}
+        ,'estado': {'type': 'boolean'}
     },
-    "required": ["tipo", "latitud", "longitud", "ip_sensor"],
+    "required": ["tipo", "latitud", "longitud", "ip_sensor", "estado"],
 
 }
 
@@ -34,6 +35,19 @@ def listar():
         200,
     )
 
+@api_mota.route("/mota/activos")
+def listarEstado():
+    return make_response(
+        jsonify(
+            {
+                "msg": "OK",
+                "code": 200,
+                "datos": ([i.serialize for i in motaC.listar_por_estado()]),
+            }
+        ),
+        200,
+    )
+
 
 # api para guardar mota
 @api_mota.route("/mota/guardar", methods=["POST"])
@@ -43,7 +57,6 @@ def guardar_mota():
     # data en json
     data = request.json
     id = motaC.guardar(data)
-
     if id >= 0:
         return make_response(
             jsonify({"msg": "OK", "code": 200, "data": {"tag": "mota guardada"}}),

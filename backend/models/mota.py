@@ -9,8 +9,8 @@ class Mota(db.Model):
     latitud = db.Column(db.Float)
     longitud = db.Column(db.Float)
     ip_sensor = db.Column(db.String(100))
-    created_at = db.Column(db.Date)
-    updated_at = db.Column(db.Date)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     estado = db.Column(db.Boolean, default=True)
 
     @property
@@ -18,7 +18,7 @@ class Mota(db.Model):
         return {
             'id': self.id,
             'external_id': self.external_id,
-            'tipo': self.tipo,
+            'tipo': self.tipo.serialize if self.tipo else None,
             'latitud': self.latitud,
             'longitud': self.longitud,
             'ip_sensor': self.ip_sensor,

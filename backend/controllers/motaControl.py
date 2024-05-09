@@ -15,18 +15,21 @@ class MotaControl:
     def listar_por_estado(self,estado):
         return Mota.query.filter_by(estado=estado).all()
     
+
+    
+    
+
+    
     
     
     # Metodo para guardar persona
     def guardar(self, data):
         mota = Mota()
-        mota.id = str(uuid.uuid4())
+        mota.external_id = str(uuid.uuid4())
         mota.tipo = data['tipo']
         mota.latitud = data['latitud']
         mota.longitud = data['longitud']
         mota.ip_sensor = data['ip_sensor']
-        mota.created_at = data['created_at']
-        mota.updated_at = data['updated_at']
         mota.estado = data['estado']
         db.session.add(mota)
         db.session.commit()
@@ -40,8 +43,6 @@ class MotaControl:
             mota.latitud = data['latitud']
             mota.longitud = data['longitud']
             mota.ip_sensor = data['ip_sensor']
-            mota.created_at = data['created_at']
-            mota.updated_at = data['updated_at']
             mota.estado = data['estado']
             db.session.merge(mota)
             db.session.commit()
@@ -50,7 +51,7 @@ class MotaControl:
             return -1
         
     def desactivar(self,external):
-        mota = Mota.query.filter_by(id=external).first()
+        mota = Mota.query.filter_by(external_id=external).first()
         if mota:
             mota.estado = False
             db.session.merge(mota)
@@ -60,7 +61,7 @@ class MotaControl:
             return -1
         
     def activar(self,external):
-        mota = Mota.query.filter_by(id=external).first()
+        mota = Mota.query.filter_by(external_id=external).first()
         if mota:
             mota.estado = True
             db.session.merge(mota)
@@ -70,10 +71,9 @@ class MotaControl:
             return -1
         
     def obtener_mota_external_id(self, external):
-        return Mota.query.filter_by(id=external).first()
-    
+        return Mota.query.filter_by(external_id=external).first()
 
-        
+
 
                 
         
