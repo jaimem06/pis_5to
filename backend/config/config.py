@@ -14,7 +14,7 @@ class Config:
     user = environ.get('MYSQL_USER')
     password = environ.get('MYSQL_PASSWORD')
     host = environ.get('MYSQL_HOST')
-    db = environ.get('MYSQL_DATABASE')
+    db = environ.get('PIS5TO')
 
     # Configuración para Token
     SECRET_KEY = environ.get('SECRET_KEY')

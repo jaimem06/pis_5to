@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, make_response, request
 from models import mota
 from models import tipoMota
+from models import historial
 
 # Aqui importacion de los modelos de las tablas
 
