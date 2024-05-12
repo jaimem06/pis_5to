@@ -5,7 +5,7 @@ import uuid
 
 class MotaControl:
 
-    # Metodo para listar personas
+    # Metodo para listar motas
     def listar(self):
         return Mota.query.all()
     
@@ -22,7 +22,7 @@ class MotaControl:
     
     
     
-    # Metodo para guardar persona
+    # Metodo para guardar mota
     def guardar(self, data):
         mota = Mota()
         mota.external_id = str(uuid.uuid4())
