@@ -12,6 +12,8 @@ class Mota(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     estado = db.Column(db.Boolean, default=True)
+    # Relación uno a muchos con Historial
+    historial_id = db.Column(db.Integer, db.ForeignKey('historial.id'))
 
     @property
     def serialize(self):

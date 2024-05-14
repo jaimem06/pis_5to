@@ -2,6 +2,7 @@ from app import db
 import uuid
 from datetime import datetime
 from models.cuenta import Cuenta
+from models.personas_motas import personas_motas
 
 class Persona(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -13,6 +14,7 @@ class Persona(db.Model):
     # Relación uno a uno con cuenta
     #uselist = False sirve para especificar que una persona solo se relaciona con un objeto cuenta
     cuenta = db.relationship("Cuenta", backref="persona", uselist=False)
+    motas = db.relationship('Mota', secondary=personas_motas, backref=db.backref('personas'))
 
     @property
     def serialize(self):

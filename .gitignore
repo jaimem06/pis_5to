@@ -1,0 +1,3 @@
+backend/config/.env
+backend/virtual/
+backend/virtual/pyvenv.cfg
