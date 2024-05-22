@@ -106,3 +106,25 @@ def modificar(external):
             ),
             400,
         )
+
+#api para actualizar estado de cuenta persona
+@api_persona.route("persona/actualizar-estado/<external>", methods=["POST"])
+def actualizar_estado(external):
+    persona, estado = productoC.actualizar_estado(external)
+    
+    if persona:
+        return make_response(
+            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Cuenta "+estado}}),
+            200,
+        )
+    else:
+        return make_response(
+            jsonify(
+                {
+                    "msg": "ERROR",
+                    "code": 400,
+                    "datos": {"error": Errors.error[str(persona)]},
+                }
+            ),
+            400,
+        )
