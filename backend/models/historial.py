@@ -11,7 +11,8 @@ class Historial(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     estado = db.Column(db.Boolean)
     # Relación uno a muchos con Mota
-    motas = db.relationship('Mota', backref='historial')
+    mota_id = db.Column(db.Integer, db.ForeignKey('mota.id'))
+    motas = db.relationship('Mota', back_populates='historial')
 
     @property
     def serialize(self):
