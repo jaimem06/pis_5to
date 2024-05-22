@@ -48,17 +48,19 @@ class PersonaControl:
      #Metodo para actualizar estado de cuenta de persona
      def actualizar_estado(self, external):
         persona = Persona.query.filter_by(external_id=external).first()
-        if persona:
-            if persona.cuenta.estado == True:
-                persona.cuenta.estado = False
-                estado="DESACTIVADA"
+        c = Cuenta.query.filter_by(id_persona=persona.id).first()
+
+        if persona and c:
+            if c.estado == True:
+                c.estado = False
+                estado = "DESACTIVADA"
             else:
-                persona.cuenta.estado = True
-                estado="ACTIVADA"
-            
+                c.estado = True
+                estado = "ACTIVADA"
+
             db.session.merge(persona)
             db.session.commit()
 
-            return persona.id, estado
+            return c.id, estado
         else:
             return -1
