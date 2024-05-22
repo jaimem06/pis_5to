@@ -12,8 +12,16 @@ schema_persona = {
     "properties": {
         "nombre": {"type": "string", "pattern": "^[a-zA-Z ]+$"},
         "apellido": {"type": "string", "pattern": "^[a-zA-Z ]+$"},
+        "correo": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
+        },
+        "clave": {
+            "type": "string",
+            "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
+        },
     },
-    "required": ["nombre", "apellido"],
+    "required": ["nombre", "apellido", "correo", "clave"],
 }
 
 
@@ -108,7 +116,7 @@ def modificar(external):
         )
 
 #api para actualizar estado de cuenta persona
-@api_persona.route("persona/actualizar-estado/<external>", methods=["POST"])
+@api_persona.route("/persona/actualizar-estado/<external>", methods=["POST"])
 def actualizar_estado(external):
     persona, estado = productoC.actualizar_estado(external)
     
