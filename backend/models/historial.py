@@ -12,7 +12,7 @@ class Historial(db.Model):
     estado = db.Column(db.Boolean)
     # Relación uno a muchos con Mota
     mota_id = db.Column(db.Integer, db.ForeignKey('mota.id'))
-    motas = db.relationship('Mota', back_populates='historial')
+    mota = db.relationship('Mota', back_populates='historial')
 
     @property
     def serialize(self):
