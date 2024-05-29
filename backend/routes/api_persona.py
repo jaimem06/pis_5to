@@ -5,7 +5,7 @@ from flask_expects_json import expects_json
 
 api_persona = Blueprint("api_persona", __name__)
 
-productoC = PersonaControl()
+personaC = PersonaControl()
 # declaracion de esquema para validacion de datos Persona
 schema_persona = {
     "type": "object",
@@ -33,7 +33,7 @@ def listar():
             {
                 "msg": "OK",
                 "code": 200,
-                "datos": ([i.serialize for i in productoC.listar()]),
+                "datos": ([i.serialize for i in personaC.listar()]),
             }
         ),
         200,
@@ -47,7 +47,7 @@ def listar():
 def guardar_persona():
     # data en json
     data = request.json
-    id = productoC.guardar(data)
+    id = personaC.guardar(data)
 
     if id >= 0:
         return make_response(
@@ -70,7 +70,7 @@ def guardar_persona():
 # API para mostrar persona por external_id
 @api_persona.route("/persona/<external_id>", methods=["GET"])
 def listar_external_id(external_id):
-    persona = productoC.obtener_persona_external_id(external_id)
+    persona = personaC.obtener_persona_external_id(external_id)
 
     if persona:
         return make_response(
@@ -96,7 +96,7 @@ def listar_external_id(external_id):
 def modificar(external):
 
     data = request.json
-    persona = productoC.modificar_persona(data, external)
+    persona = personaC.modificar_persona(data, external)
 
     if persona:
         return make_response(
@@ -115,14 +115,15 @@ def modificar(external):
             400,
         )
 
-#api para actualizar estado de cuenta persona
+
+# api para actualizar estado de cuenta persona
 @api_persona.route("/persona/actualizar-estado/<external>", methods=["POST"])
 def actualizar_estado(external):
-    persona, estado = productoC.actualizar_estado(external)
-    
+    persona, estado = personaC.actualizar_estado(external)
+
     if persona:
         return make_response(
-            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Cuenta "+estado}}),
+            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Cuenta " + str(estado)}}),
             200,
         )
     else:
