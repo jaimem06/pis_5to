@@ -11,7 +11,7 @@ class PersonaControl:
         return Persona.query.all()
     
     # Metodo para guardar persona
-      def guardar(self, data):
+    def guardar(self, data):
         c = Cuenta.query.filter_by(correo=data["correo"]).first()
         if c:
             return -1
@@ -69,7 +69,7 @@ class PersonaControl:
             return -1
             
      #Metodo para actualizar estado de cuenta de persona
-     def actualizar_estado(self, external):
+    def actualizar_estado(self, external):
         persona = Persona.query.filter_by(external_id=external).first()
         c = Cuenta.query.filter_by(id_persona=persona.id).first()
 

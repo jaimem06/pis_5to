@@ -25,5 +25,5 @@ def create_app():
         app.register_blueprint(api_historial)
         # Creacion de las tablas
         db.create_all()
-        # db.drop_all()
+        #db.drop_all()
     return app
