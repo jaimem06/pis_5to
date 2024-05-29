@@ -14,8 +14,7 @@ class Persona(db.Model):
     # Relación uno a uno con cuenta
     #uselist = False sirve para especificar que una persona solo se relaciona con un objeto cuenta
     cuenta = db.relationship("Cuenta", backref="persona", uselist=False)
-    motas = db.relationship('Mota', secondary=personas_motas, backref=db.backref('personas'))
-
+    mota = db.relationship('Mota', secondary=personas_motas, back_populates='persona', lazy=True)
     @property
     def serialize(self):
         return {

@@ -11,13 +11,14 @@ class HistorialControl:
 
     # Método para guardar historial
     def guardar(self, data):
+
         historial = Historial()
         historial.external_id = str(uuid.uuid4())
         historial.dato = data['dato']
-        historial.fecha = data['fecha']
-        historial.hora = data['hora']
+        historial.fecha = datetime.now().date()  # Guarda la fecha actual
+        historial.hora = datetime.now().time()  
         historial.estado = data['estado']
-
+        historial.mota_id = data['mota_id']
         db.session.add(historial)
         db.session.commit()
         return historial.id
@@ -32,8 +33,8 @@ class HistorialControl:
 
         if historial:
             historial.dato = data['dato']
-            historial.fecha = data['fecha']
-            historial.hora = data['hora']
+            historial.fecha = datetime.now().date()  # Guarda la fecha actual
+            historial.hora = datetime.now().time()  # Guarda la hora actual
             historial.estado = data['estado']
 
             db.session.merge(historial)
