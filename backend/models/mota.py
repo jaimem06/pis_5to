@@ -1,6 +1,7 @@
 from app import db
 import uuid
 from models.tipoMota import TipoMota
+from models.personas_motas import personas_motas
 
 class Mota(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -14,7 +15,8 @@ class Mota(db.Model):
     estado = db.Column(db.Boolean, default=True)
     # Relación muchos a uno con Historial
     historial = db.relationship('Historial')
-
+    # Muchos a muchos con Persona
+    persona = db.relationship('Persona', secondary=personas_motas, back_populates='mota')
 
     @property
     def serialize(self):
