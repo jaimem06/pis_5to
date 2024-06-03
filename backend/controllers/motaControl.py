@@ -60,6 +60,10 @@ class MotaControl:
             mota.latitud = data.get ('latitud')
             mota.longitud = data.get('longitud')
             mota.ip_sensor = data.get('ip_sensor')
+            validacion_ip = self.validar_ip(mota.ip_sensor)
+            if validacion_ip != True:
+                return validacion_ip
+            mota.ip_sensor = self.cifrador.encrypt(mota.ip_sensor.encode())
             mota.estado = data.get('estado')
             db.session.merge(mota)
             db.session.commit()
