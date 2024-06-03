@@ -69,7 +69,7 @@ class MotaControl:
             db.session.commit()
             return mota
         else:
-            return -1
+            return -5
         
     def desactivar(self,external):
         mota = Mota.query.filter_by(external_id=external).first()
@@ -79,7 +79,7 @@ class MotaControl:
             db.session.commit()
             return mota
         else:
-            return -1
+            return -6
         
     def activar(self,external):
         mota = Mota.query.filter_by(external_id=external).first()
@@ -89,7 +89,7 @@ class MotaControl:
             db.session.commit()
             return mota
         else:
-            return -1
+            return -7
         
     def obtener_mota_external_id(self, external):
         return Mota.query.filter_by(external_id=external).first()
