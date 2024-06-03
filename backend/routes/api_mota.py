@@ -60,7 +60,13 @@ def guardar():
         )
     else:
         return make_response(
-            jsonify({"msg": "Error","code": 400,"data": {"tag": "No se pudo guardar mota"}}),
+            jsonify(
+                {
+                    "msg": "ERROR",
+                    "code": 400,
+                    "datos": {"error": Errors.error[str(id)]},
+                }
+            ),
             400,
         )
 
@@ -80,7 +86,7 @@ def listar_external_id(external_id):
                 {
                     "msg": "Error",
                     "code": 404,
-                    "datos": {"error": "mota no encontrada"},
+                    "datos": {"error": Errors.error[str(mota)]},
                 }
             ),
             404,
