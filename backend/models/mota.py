@@ -27,9 +27,20 @@ class Mota(db.Model):
             'latitud': self.latitud,
             'longitud': self.longitud,
             'ip_sensor': self.ip_sensor,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
             'estado': self.estado
         }
+    
+    def get_id(self):
+        return self.id
+    
+    def copy(self):
+        return Mota(
+            external_id=self.external_id,
+            tipo=self.tipo,
+            latitud=self.latitud,
+            longitud=self.longitud,
+            ip_sensor=self.ip_sensor,
+            estado=self.estado
+        )
 
    
