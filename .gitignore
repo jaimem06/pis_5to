@@ -1,0 +1,5 @@
+backend/config/.env
+backend/virtual/
+backend/virtual/pyvenv.cfg
+*.pyc
+__pycache__/

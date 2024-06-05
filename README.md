@@ -18,3 +18,6 @@ NOTA: No hacer commit directamente en `main`.
 
 Para evitar conflictos entre los entornos virtuales, cada uno cambiar la dirección de su proyecto en el archivo `pyvenv.cfg`
 Igual solo hacer una vez por que ya esta el .gitignore
+
+## Actualizar archivo de paquetes
+1. Actualizar solo cuando se instale un nuevo paquete con: `pip freeze > package.txt`
