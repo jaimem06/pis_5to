@@ -3,7 +3,7 @@
 
 1. Activar el entorno virtual con el comando:
     - Linux: `source backend/virtual/bin/activate`
-    - PowerShell: `. .\backend\virtual\bin\Activate.ps1`
+    - PowerShell: `. .\backend\virtual\scripts\activate`
 
 ## Flujo de trabajo de Git
 
@@ -18,3 +18,6 @@ NOTA: No hacer commit directamente en `main`.
 
 Para evitar conflictos entre los entornos virtuales, cada uno cambiar la dirección de su proyecto en el archivo `pyvenv.cfg`
 Igual solo hacer una vez por que ya esta el .gitignore
+
+## Actualizar archivo de paquetes
+1. Actualizar solo cuando se instale un nuevo paquete con: `pip freeze > package.txt`
