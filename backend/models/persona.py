@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime
 from models.cuenta import Cuenta
 from models.personas_motas import personas_motas
+import copy
 
 class Persona(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,13 +22,9 @@ class Persona(db.Model):
             "external_id": self.external_id,
             "nombre": self.nombre,
             "apellido": self.apellido,
+            "cuenta": self.cuenta.serialize if self.cuenta else "No tiene cuenta",
         }
 
     def copy(self):
-        nueva_persona = Persona(
-            id=self.id,
-            nombre=self.nombre,
-            apellido=self.apellido,
-            external_id=self.external_id,
-        )
+        nueva_persona = copy.deepcopy(self)
         return nueva_persona

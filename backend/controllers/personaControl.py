@@ -23,10 +23,13 @@ class PersonaControl:
             persona.external_id = uuid.uuid4()
             db.session.add(persona)
             db.session.commit()
+
             cuenta = Cuenta()
             cuenta.correo = data["correo"]
             cuenta.clave = hashlib.sha256(data["clave"].encode()).hexdigest()
             cuenta.external_id = uuid.uuid4()
+            cuenta.id_persona = persona.id
+            
             db.session.add(cuenta)
             db.session.commit()
             return cuenta.id

@@ -15,13 +15,23 @@ schema_persona = {
         "correo": {
             "type": "string",
             "pattern": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
+            "errorMessage": "Correo invalido debe tener formato: ejemplo@gmail.com",
         },
         "clave": {
             "type": "string",
             "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
+            "errorMessage": "La clave debe tener al menos 8 caracteres, una letra mayuscula, una letra minuscula, un numero y un caracter especial",
         },
     },
     "required": ["nombre", "apellido", "correo", "clave"],
+    "errorMessage": {
+        "required": {
+            "nombre": "El nombre es obligatorio.",
+            "apellido": "El apellido es obligatorio.",
+            "correo": "El correo es obligatorio.",
+            "clave": "La clave es obligatoria.",
+        }
+    },
 }
 
 
@@ -123,7 +133,9 @@ def actualizar_estado(external):
 
     if persona:
         return make_response(
-            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Cuenta " + str(estado)}}),
+            jsonify(
+                {"msg": "OK", "code": 200, "data": {"tag": "Cuenta " + str(estado)}}
+            ),
             200,
         )
     else:
