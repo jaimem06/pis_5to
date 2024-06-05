@@ -18,11 +18,13 @@ def create_app():
         from routes.api_persona import api_persona
         from routes.api_mota import api_mota
         from routes.api_historial import api_historial
+        from routes.api_login import api_login
         
         app.register_blueprint(api_persona)
         app.register_blueprint(api)
         app.register_blueprint(api_mota)
         app.register_blueprint(api_historial)
+        app.register_blueprint(api_login)
         # Creacion de las tablas
         db.create_all()
         #db.drop_all()

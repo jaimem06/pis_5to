@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, make_response, request
 from controllers.motaControl import MotaControl
 from controllers.utils.errors import Errors
 from flask_expects_json import expects_json
+from controllers.authenticate import token_required
 
 api_mota = Blueprint("api_mota", __name__)
 
@@ -23,6 +24,7 @@ schema_mota = {
 
 # api para mota
 @api_mota.route("/mota")
+@token_required
 def listar():
     return make_response(
         jsonify({"msg": "OK","code": 200,"datos": ([i.serialize for i in motaC.listar()]),}),
