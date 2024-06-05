@@ -5,14 +5,16 @@ from app import db
 import jwt
 from datetime import datetime, timedelta, timezone
 from flask import current_app
+import hashlib
 
 class LoginControl:
     
     def inicio_sesion(self, data):
         cuentaA = Cuenta.query.filter_by(correo = data.get('correo')).first()
         if cuentaA:
-            # TODO encriptar
-            if cuentaA.clave == data["clave"]:
+            # Encriptar la contraseña enviada y compararla con la almacenada
+            clave_encriptada = hashlib.sha256(data["clave"].encode()).hexdigest()
+            if cuentaA.clave == clave_encriptada:
                 token = jwt.encode(
                     {
                         "external": cuentaA.external_id,
