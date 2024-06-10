@@ -15,7 +15,7 @@ class PersonaControl:
     def guardar(self, data):
         c = Cuenta.query.filter_by(correo=data["correo"]).first()
         if c:
-            return -1
+            return -14
         else:
             persona = Persona()
             persona.apellido = data["apellido"]

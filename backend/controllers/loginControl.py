@@ -12,7 +12,7 @@ class LoginControl:
     def inicio_sesion(self, data):
         cuentaA = Cuenta.query.filter_by(correo = data.get('correo')).first()
         if cuentaA:
-            # Encriptar la contraseña enviada y compararla con la almacenada
+            # Encriptar la clave enviada y compararla con la almacenada
             clave_encriptada = hashlib.sha256(data["clave"].encode()).hexdigest()
             if cuentaA.clave == clave_encriptada:
                 token = jwt.encode(

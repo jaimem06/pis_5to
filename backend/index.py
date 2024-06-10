@@ -1,6 +1,7 @@
 from app import create_app
 from jsonschema import ValidationError
 from flask import jsonify, make_response, request
+from controllers.utils.errors import Errors, Errors_code
 
 app = create_app()
 
@@ -26,16 +27,26 @@ def after_request_func(response):
             response.headers.add("Access-Control-Allow-Origin", origin)
     return response
 
-
 @app.errorhandler(400)
 def bad_request(error):
     if isinstance(error.description, ValidationError):
+        id = error.description.path[-1]  # se obtiene el campo que causó el error
+        # Si el campo que causó el error está en el diccionario de errores
+        if id in Errors_code.error:
+            # Obtenemos el código de error y el mensaje
+            codigo = Errors_code.error[id]
+            # buscamos el mensaje en el diccionario de errores
+            mensaje = Errors.error[codigo]
+        else:
+            # Si no está en el diccionario de errores, mostramos el mensaje por defecto
+            mensaje = error.description.message
+        
         return make_response(
             jsonify(
                 {
                     "msg": "Error",
                     "code": 400,
-                    "datos": {str(error.description.message): "error"},
+                    "datos": {"error": mensaje},
                 }
             ),
             400,

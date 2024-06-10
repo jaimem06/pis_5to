@@ -10,28 +10,24 @@ personaC = PersonaControl()
 schema_persona = {
     "type": "object",
     "properties": {
-        "nombre": {"type": "string", "pattern": "^[a-zA-Z ]+$"},
-        "apellido": {"type": "string", "pattern": "^[a-zA-Z ]+$"},
+        "nombre": {
+            "type": "string",
+            "pattern": "^[a-zA-Z ]+$",
+        },
+        "apellido": {
+            "type": "string",
+            "pattern": "^[a-zA-Z ]+$",
+        },
         "correo": {
             "type": "string",
-            "pattern": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
-            "errorMessage": "Correo invalido debe tener formato: ejemplo@gmail.com",
+            "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
         },
         "clave": {
             "type": "string",
-            "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
-            "errorMessage": "La clave debe tener al menos 8 caracteres, una letra mayuscula, una letra minuscula, un numero y un caracter especial",
+            "pattern": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])\S{8,20}$",
         },
     },
     "required": ["nombre", "apellido", "correo", "clave"],
-    "errorMessage": {
-        "required": {
-            "nombre": "El nombre es obligatorio.",
-            "apellido": "El apellido es obligatorio.",
-            "correo": "El correo es obligatorio.",
-            "clave": "La clave es obligatoria.",
-        }
-    },
 }
 
 
@@ -70,7 +66,7 @@ def guardar_persona():
                 {
                     "msg": "ERROR",
                     "code": 400,
-                    "data": {"tag": "No se pudo guardar persona"},
+                    "data": {"error": "No se puede guardar persona, "+str(Errors.error[str(id)])},
                 }
             ),
             400,
