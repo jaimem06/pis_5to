@@ -39,7 +39,7 @@ const menuGroups = [
           </svg>
         ),
         label: "Mediciones",
-        route: "#",
+        route: "/",
       },
       {
         icon: (
@@ -84,7 +84,7 @@ const menuGroups = [
           </svg>
         ),
         label: "Administrar Usuarios",
-        route: "/calendar",
+        route: "/admin-usuario",
       },
       {
         icon: (
@@ -111,7 +111,7 @@ const menuGroups = [
           </svg>
         ),
         label: "Administrar Sensores",
-        route: "/profile",
+        route: "/admin-sensor",
       },
       {
         icon: (
@@ -132,7 +132,7 @@ const menuGroups = [
           </svg>
         ),
         label: "Ubicacion Sensores",
-        route: "#"
+        route: "/ubicacion-sensor"
       },
       {
         icon: (

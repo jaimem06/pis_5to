@@ -4,6 +4,7 @@ interface BreadcrumbProps {
   pageName: string;
 }
 
+// Miga de pan, muestra la ruta de navegación del usuario
 const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
