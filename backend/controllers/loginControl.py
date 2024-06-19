@@ -8,7 +8,6 @@ from flask import current_app
 import hashlib
 
 class LoginControl:
-    
     def inicio_sesion(self, data):
         cuentaA = Cuenta.query.filter_by(correo = data.get('correo')).first()
         if cuentaA:

@@ -1,0 +1,115 @@
+.container {
+    justify-content: center;    /* Centra horizontalmente */
+    align-items: center;    /* Centra verticalmente */
+    height: 100vh;
+    display: flex;
+}
+
+.login {
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: block;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 500px;
+    min-height: 350px;
+    width: 80%;
+    flex-direction: column;
+    gap: 35px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.363);
+}
+
+.inputBox {
+    position: relative;
+    width: 80%;
+    max-width: 250px;
+    /* Cambiado para móviles */
+}
+
+.inputBox input {
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    border: none;
+    color: black;
+    font-size: 1em;
+    background: transparent;
+    border-left: 2px solid #1C4443;
+    border-bottom: 2px solid #1C4443;
+    transition: 0.1s;
+    border-bottom-left-radius: 8px;
+}
+
+.inputBox span {
+    margin-top: 5px;
+    position: absolute;
+    left: 0;
+    transform: translateY(-20px);
+    margin-left: 10px;
+    padding: 10px;
+    pointer-events: none;
+    font-size: 12px;
+    color: #000;
+    text-transform: uppercase;
+    transition: 0.5s;
+    letter-spacing: 3px;
+    border-radius: 8px;
+}
+
+.inputBox input:valid~span,
+.inputBox input:focus~span {
+    transform: translateX(130px) translateY(-20px);
+    font-size: 0.8em;
+    padding: 2px 8px;
+    background: #1C4443;
+    letter-spacing: 0.2em;
+    color: #fff;
+    border: 2px;
+}
+
+.inputBox input:valid,
+.inputBox input:focus {
+    border: 2px solid #1C4443;
+    border-radius: 8px;
+}
+
+.btnlogin {
+    height: 50px;
+    width: 80%;
+    border-radius: 5px;
+    border: 2px solid #29333C;
+    cursor: pointer;
+    background-color: transparent;
+    transition: 0.5s;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 1em;
+    background-color: #2C3E50;
+}
+
+.btnlogin:hover {
+    background-color: #83949E;
+    color: black;
+}
+
+
+/* Media query para pantallas más grandes */
+@media (min-width: 768px) {
+    .card {
+        width: 25%;
+    }
+
+    .inputBox {
+        width: 260px;
+    }
+}
