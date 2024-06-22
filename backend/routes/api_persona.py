@@ -21,10 +21,13 @@ schema_persona = {
         "correo": {
             "type": "string",
             "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+            "maxLength": 100,
         },
         "clave": {
             "type": "string",
-            "pattern": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])\S{8,20}$",
+            "pattern": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&*-+=()])\S{8,20}$",
+            "minLength": 8,
+            "maxLength": 20,
         },
     },
     "required": ["nombre", "apellido", "correo", "clave"],
@@ -104,7 +107,7 @@ def modificar(external):
     data = request.json
     persona = personaC.modificar_persona(data, external)
 
-    if persona:
+    if persona >=0:
         return make_response(
             jsonify({"msg": "OK", "code": 200, "data": {"tag": "Datos modificados"}}),
             200,
@@ -127,7 +130,7 @@ def modificar(external):
 def actualizar_estado(external):
     persona, estado = personaC.actualizar_estado(external)
 
-    if persona:
+    if persona >=0:
         return make_response(
             jsonify(
                 {"msg": "OK", "code": 200, "data": {"tag": "Cuenta " + str(estado)}}

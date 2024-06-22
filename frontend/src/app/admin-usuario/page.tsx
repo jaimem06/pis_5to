@@ -1,19 +1,31 @@
-import { Metadata } from "next";
+"use client";
+
+import TableThree from "@/components/Tables/TableThree";
+import { listar_personas } from "@/hooks/servicio_persona";
+import { useEffect, useState } from "react";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
-export const metadata: Metadata = {
-  title:
-  "PIS 5to Dashboard",
-  description: "Proyecto integrador del 5to ciclo de la carrera de Ingeniería en Computación.",
-};
-
 const PageAdminUser = () => {
+  let [persona, setPersona] = useState([]);
+ 
+  useEffect(() => {
+    listar_personas().then((res) => {
+      if (res && res.code === 200) {
+        setPersona(res.datos);
+      }else{
+        console.log("Error");
+      }
+    });
+  }, []);
+
+  console.log(persona);
+
   return (
     <DefaultLayout>
       <div className="mx-auto max-w-7xl">
         <Breadcrumb pageName="Admin Usuarios" />
-        <p>Aqui Tabla para Adminitrar Usuarios</p>
+        <TableThree data={persona} />
       </div>
     </DefaultLayout>
   );
