@@ -1,10 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
+import Cookies from "js-cookie";
+import { obtener_persona } from "@/hooks/servicio_persona";
 
 const MenuSettingsUser = () => {
+  const ruta = useRouter();
+  const external = Cookies.get('external');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  let [usuario, setUsuario] = useState([]);
+
+  useEffect(() => {
+    obtener_persona(external).then((res) =>{
+      if (res && res.code === 200) {
+        setUsuario(res.datos);
+      }else{
+        console.log("Error");
+      }
+    });
+  }, [external]);
+  //Cerrar sesion
+  function cerrarSesion(){
+    Cookies.remove("token");
+    Cookies.remove("user");
+    Cookies.remove("external");
+
+    ruta.push("/inicio-sesion");
+  }
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -14,7 +38,7 @@ const MenuSettingsUser = () => {
         href="#"
       >
         <span className="flex items-center gap-2 font-medium text-dark dark:text-dark-6">
-          <span className="hidden lg:block">Aqui nombre Usuario</span>
+          <span className="hidden lg:block">{usuario.nombre+" "+usuario.apellido}</span>
 
           <svg
             className={`fill-current duration-200 ease-in ${dropdownOpen && "rotate-180"}`}
@@ -42,10 +66,10 @@ const MenuSettingsUser = () => {
           <div className="flex items-center gap-2.5 px-5 pb-5.5 pt-3.5">
             <span className="block">
               <span className="block font-medium text-dark dark:text-white">
-                Aqui nombre Usuario
+                {usuario.nombre + " " + usuario.apellido}
               </span>
               <span className="block font-medium text-dark-5 dark:text-dark-6">
-                ejemplo@gmail.com
+                {usuario.cuenta.correo}
               </span>
             </span>
           </div>
@@ -81,7 +105,7 @@ const MenuSettingsUser = () => {
             </li>
           </ul>
           <div className="p-2.5">
-            <button className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base">
+            <button className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base" onClick={()=>cerrarSesion()}>
               <svg
                 className="fill-current"
                 width="18"

@@ -57,7 +57,20 @@ export async function modificar_estado (external) {
     let datos = null;
     try {
         const token = Cookies.get('token');
-        datos = await POST("persona/actualizar-estado/"+external,token);
+        datos = await GET("persona/actualizar-estado/"+external,token);
+    } catch (error) {
+        console.log(error.response.data);
+        return { "code": 500 }
+    }
+    return datos.data;
+}
+
+//servicio para modificar credenciales de una persona
+export async function modificar_credenciales (data, external) {
+    let datos = null;
+    try {
+        const token = Cookies.get('token');
+        datos = await POST("persona/modificar-credenciales/"+external,data,token);
     } catch (error) {
         console.log(error.response.data);
         return { "code": 500 }

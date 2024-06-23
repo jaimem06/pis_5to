@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/admin-usuario/page": [
+    "/admin-usuario/[external]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin-usuario/page.js"
+      "static/chunks/app/admin-usuario/[external]/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,15 +11,41 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/admin-usuario/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin-usuario/page.js"
+    ],
+    "/admin-usuario/c/[ext]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin-usuario/c/[ext]/page.js"
+    ],
+    "/inicio-sesion/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/inicio-sesion/page.css",
+      "static/chunks/app/inicio-sesion/page.js"
+    ],
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/_not-found/page": [
+    "/admin-sensor/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/admin-sensor/page.js"
+    ],
+    "/configuracion-perfil/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/configuracion-perfil/page.js"
+    ],
+    "/admin-usuario/nuevo/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin-usuario/nuevo/page.js"
     ]
   }
 }

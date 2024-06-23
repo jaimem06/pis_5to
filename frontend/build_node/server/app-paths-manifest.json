@@ -1,5 +1,8 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/configuracion-perfil/page": "app/configuracion-perfil/page.js",
   "/admin-usuario/page": "app/admin-usuario/page.js",
-  "/page": "app/page.js"
+  "/admin-usuario/[external]/page": "app/admin-usuario/[external]/page.js",
+  "/admin-usuario/nuevo/page": "app/admin-usuario/nuevo/page.js",
+  "/admin-usuario/c/[ext]/page": "app/admin-usuario/c/[ext]/page.js"
 }

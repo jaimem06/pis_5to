@@ -9,7 +9,7 @@ import hashlib
 
 class LoginControl:
     def inicio_sesion(self, data):
-        cuentaA = Cuenta.query.filter_by(correo = data.get('correo')).first()
+        cuentaA = Cuenta.query.filter_by(correo = data.get('correo'), estado=True).first()
         if cuentaA:
             # Encriptar la clave enviada y compararla con la almacenada
             clave_encriptada = hashlib.sha256(data["clave"].encode()).hexdigest()
@@ -25,9 +25,11 @@ class LoginControl:
                 cuenta = Cuenta()
                 cuenta.copy_data(cuentaA)
                 persona = cuentaA.getPersona(cuentaA.id_persona)
+                external = Persona.query.filter_by(id=cuentaA.id_persona).first().external_id
                 info = {
                     "token": token,
-                    "user": persona.apellido + " " + persona.nombre
+                    "user": persona.apellido + " " + persona.nombre,
+                    "external": external,
                 }
                 return info
             else:
