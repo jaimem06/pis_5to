@@ -110,6 +110,7 @@ const FormularioPersona = () => {
               id="nombre"
               required
               {...register("nombre")}
+              placeholder="Ingrese su nombre"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
             {errors.nombre && (
@@ -153,6 +154,7 @@ const FormularioPersona = () => {
               id="apellido"
               required
               {...register("apellido")}
+              placeholder="Ingrese su apellido"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
             {errors && (
@@ -190,6 +192,7 @@ const FormularioPersona = () => {
               id="correo"
               required
               {...register("correo")}
+              placeholder="Ingrese su correo electronico"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
             {errors && (
@@ -228,6 +231,7 @@ const FormularioPersona = () => {
               id="clave"
               required
               {...register("clave")}
+              placeholder="Ingrese su clave"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
             {errors && (

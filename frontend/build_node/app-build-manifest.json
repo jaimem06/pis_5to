@@ -31,16 +31,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/admin-usuario/c/[ext]/page.js"
-    ],
-    "/admin-usuario/nuevo/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin-usuario/nuevo/page.js"
-    ],
-    "/admin-sensor/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin-sensor/page.js"
     ]
   }
 }

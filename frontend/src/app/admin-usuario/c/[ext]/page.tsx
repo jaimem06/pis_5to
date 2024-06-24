@@ -20,7 +20,7 @@ interface FormData {
 const FormularioCredenciales = () => {
   const router = useRouter();
   const external = useParams().ext;
-  console.log(external);
+
   const validationSchema = Yup.object().shape({
     correo: Yup.string().trim().email("Correo inválido")
       .required("El correo actual es requerido"),
@@ -34,13 +34,13 @@ const FormularioCredenciales = () => {
     clave: Yup.string().trim().matches(
       /^(?=.*[0-9])(?=.*[!@#~=+?$%^&*])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d!@#~=+?$%^&*]{8,20}$/,
       "La clave debe contener al menos una mayúscula, una minúscula, un número y un carácter especial",
-    ).required("La clave actual es requerida"),
+    ).min(8,"La clave debe tener al menos 8 caracteres alfanumericos").max(20,"La clave no debe tener mas de 20 caracteres alfanumericos").required("La clave actual es requerida"),
     nueva_clave: Yup.string().trim()
       .notOneOf(
         [Yup.ref("clave")],
         "La nueva clave debe ser diferente a la actual",
       )
-      .min(8, "La nueva clave debe tener al menos 8 caracteres")
+      .min(8, "La nueva clave debe tener al menos 8 caracteres alfanumericos").max(20, "La nueva clave no debe tener mas de 20 caracteres alfanumericos")
       .matches(
         /^(?=.*[0-9])(?=.*[!@#~=+?$%^&*])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d!@#~=+?$%^&*]{8,20}$/,
         "La clave debe contener al menos una mayúscula, una minúscula, un número y un carácter especial",
@@ -118,6 +118,7 @@ const FormularioCredenciales = () => {
               type="email"
               id="correoActual"
               {...register("correo")}
+              placeholder="Ingrese su correo actual"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
             {errors.correo && (
@@ -155,6 +156,7 @@ const FormularioCredenciales = () => {
               type="email"
               id="nuevo_correo"
               {...register("nuevo_correo")}
+              placeholder="Ingrese su correo nuevo"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
             {errors.nuevo_correo && (
@@ -190,11 +192,11 @@ const FormularioCredenciales = () => {
                 />
               </svg>
             </span>
-
             <input
               type="password"
               id="clave"
               {...register("clave")}
+              placeholder="Ingrese su clave actual"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
             {errors.clave && (
@@ -231,6 +233,7 @@ const FormularioCredenciales = () => {
               type="password"
               id="nueva_clave"
               {...register("nueva_clave")}
+              placeholder="Ingrese su nueva clave"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
             {errors.nueva_clave && (
@@ -270,6 +273,7 @@ const FormularioCredenciales = () => {
               type="password"
               id="confirmar_clave"
               {...register("confirmar_clave")}
+              placeholder="Confirme su nueva clave"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
             {errors.confirmar_clave && (

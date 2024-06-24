@@ -5,6 +5,7 @@ import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
 import Cookies from "js-cookie";
 import { obtener_persona } from "@/hooks/servicio_persona";
+import swal from "sweetalert";
 
 const MenuSettingsUser = () => {
   const ruta = useRouter();
@@ -22,6 +23,22 @@ const MenuSettingsUser = () => {
     });
   }, [external]);
   //Cerrar sesion
+  function cerrarSesionAlert(){
+  swal({
+    title: "¿Estás seguro?",
+    text: "¿Deseas cerrar sesión?",
+    icon: "warning",
+    buttons: ["Cancelar", "Aceptar"],
+    dangerMode: true,
+  }).then((aceptar) => {
+    if (aceptar) {
+      cerrarSesion();
+    }else{
+      return;
+    }
+  });
+  }
+
   function cerrarSesion(){
     Cookies.remove("token");
     Cookies.remove("user");
@@ -76,7 +93,7 @@ const MenuSettingsUser = () => {
           <ul className="flex flex-col gap-1 border-y-[0.5px] border-stroke p-2.5 dark:border-dark-3">
             <li>
               <Link
-                href="/configuracion-perfil"
+                href={"/admin-usuario/"+external}
                 className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base"
               >
                 <svg
@@ -105,7 +122,7 @@ const MenuSettingsUser = () => {
             </li>
           </ul>
           <div className="p-2.5">
-            <button className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base" onClick={()=>cerrarSesion()}>
+            <button className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base" onClick={()=>cerrarSesionAlert()}>
               <svg
                 className="fill-current"
                 width="18"
