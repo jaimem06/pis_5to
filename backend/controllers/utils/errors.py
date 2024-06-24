@@ -20,7 +20,10 @@ class Errors:
 class Errors_code:
     error = {
         "clave":"-11",
+        "nueva_clave":"-11",
+        "confirmar_clave":"-11",
         "correo":"-12",
+        "nuevo_correo":"-12",
         "nombre":"-13",
         "apellido":"-13",
     }
