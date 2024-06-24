@@ -15,6 +15,7 @@ class Errors:
         "-13": "El nombre y apellido solo puede contener letras",
         "-14": "El correo ya existe",
         "-15": "La clave o correo no son validos",
+        "-16": "La IP ya existe en otra mota",
     }
 
 class Errors_code:

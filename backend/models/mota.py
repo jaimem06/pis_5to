@@ -21,7 +21,6 @@ class Mota(db.Model):
     @property
     def serialize(self):
         return {
-            'id': self.id,
             'external_id': self.external_id,
             'tipo': self.tipo.serialize if self.tipo else None,
             'latitud': self.latitud,
