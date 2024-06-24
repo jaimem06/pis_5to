@@ -64,7 +64,7 @@ class MotaControl:
                 # Verificar si la nueva IP ya existe en otra mota
                 ip_existente = Mota.query.filter(Mota.ip_sensor == nueva_ip, Mota.external_id != external).first()
                 if ip_existente:
-                    return -15  # La nueva IP ya está asignada a otra mota
+                    return -16  # La nueva IP ya está asignada a otra mota
                 validacion_ip = self.validar_ip(nueva_ip)
                 if validacion_ip != True:
                     return validacion_ip
