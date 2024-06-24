@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, make_response, request
 from controllers.personaControl import PersonaControl
 from controllers.utils.errors import Errors
 from flask_expects_json import expects_json
-
+from controllers.authenticate import token_required
 api_persona = Blueprint("api_persona", __name__)
 
 personaC = PersonaControl()
@@ -90,6 +90,7 @@ schema_credenciales = {
 
 # api para persona
 @api_persona.route("/persona")
+@token_required
 def listar():
     return make_response(
         jsonify(
@@ -105,6 +106,7 @@ def listar():
 
 # api para guardar persona
 @api_persona.route("/persona/guardar", methods=["POST"])
+@token_required
 @expects_json(schema_persona)
 # guardar persona
 def guardar_persona():
@@ -132,6 +134,7 @@ def guardar_persona():
 
 # API para mostrar persona por external_id
 @api_persona.route("/persona/<external_id>", methods=["GET"])
+@token_required
 def listar_external_id(external_id):
     persona = personaC.obtener_persona_external_id(external_id)
 
@@ -154,6 +157,7 @@ def listar_external_id(external_id):
 
 # api para modificar PERSONA
 @api_persona.route("/persona/modificar/<external>", methods=["POST"])
+@token_required
 @expects_json(schema_modificar)
 # modificar persona
 def modificar(external):
@@ -180,6 +184,7 @@ def modificar(external):
 
 # api para modificar credenciales
 @api_persona.route("/persona/modificar-credenciales/<external>", methods=["POST"])
+@token_required
 @expects_json(schema_credenciales)
 def modificar_credenciales(external):
     data = request.json
@@ -204,6 +209,7 @@ def modificar_credenciales(external):
 
 # api para actualizar estado de cuenta persona
 @api_persona.route("/persona/actualizar-estado/<external>", methods=["GET"])
+@token_required
 def actualizar_estado(external):
     persona, estado = personaC.actualizar_estado(external)
 

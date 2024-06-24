@@ -32,7 +32,6 @@ const MenuSettingsUser = () => {
       dangerMode: true,
     }).then((aceptar) => {
       if (aceptar) {
-        swal({});
         cerrarSesion();
       } else {
         return;
