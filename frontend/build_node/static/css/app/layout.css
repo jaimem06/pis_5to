@@ -818,6 +818,9 @@ body{
 .mb-9{
   margin-bottom: 2.25rem;
 }
+.ml-2{
+  margin-left: 0.5rem;
+}
 .mr-2{
   margin-right: 0.5rem;
 }
@@ -1409,14 +1412,6 @@ body{
   --tw-bg-opacity: 1;
   background-color: rgb(84 117 229 / var(--tw-bg-opacity));
 }
-.bg-blue-light-2{
-  --tw-bg-opacity: 1;
-  background-color: rgb(128 153 236 / var(--tw-bg-opacity));
-}
-.bg-blue-light-3{
-  --tw-bg-opacity: 1;
-  background-color: rgb(173 188 242 / var(--tw-bg-opacity));
-}
 .bg-dark{
   --tw-bg-opacity: 1;
   background-color: rgb(17 25 40 / var(--tw-bg-opacity));
@@ -1772,10 +1767,6 @@ body{
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
-.text-xl{
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
 .font-bold{
   font-weight: 700;
 }
@@ -1787,9 +1778,6 @@ body{
 }
 .font-semibold{
   font-weight: 600;
-}
-.uppercase{
-  text-transform: uppercase;
 }
 .leading-6{
   line-height: 1.5rem;
@@ -3425,25 +3413,6 @@ input[type="search"]::-webkit-search-cancel-button{
 
   .\32xsm\:gap-4{
     gap: 1rem;
-  }
-}
-
-@media (min-width: 425px){
-
-  .xsm\:w-1\/2{
-    width: 50%;
-  }
-
-  .xsm\:flex-row{
-    flex-direction: row;
-  }
-
-  .xsm\:gap-0{
-    gap: 0px;
-  }
-
-  .xsm\:border-r{
-    border-right-width: 1px;
   }
 }
 

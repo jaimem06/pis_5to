@@ -3,7 +3,7 @@ from controllers.monitoreoControl import MonitoreoControl
 from flask_expects_json import expects_json
 from controllers.utils.errors import Errors
 api_monitoreo = Blueprint("api_monitoreo", __name__)
-from flask_socketio import SocketIO, emit
+
 monitoreoC = MonitoreoControl()
 
 
@@ -24,13 +24,7 @@ schema_guardar_monitoreo = {
 @api_monitoreo.route("/monitoreo")
 def listar():
     return make_response(
-        jsonify(
-            {
-                "msg": "OK",
-                "code": 200,
-                "datos": ([i.serialize for i in monitoreoC.listar()]),
-            }
-        ),
+        jsonify({"msg": "OK","code": 200,"datos": ([i.serialize for i in monitoreoC.listar()]),}),
         200,
     )
 
@@ -83,6 +77,9 @@ def listar_external_id(external_id):
 # API para obtener la proyección ARIMA
 @api_monitoreo.route("/monitoreo/proyeccion", methods=["GET"])
 def obtener_proyeccion():
+    # Obtener el parámetro de steps de la consulta
+    steps = request.args.get('steps', default=3, type=int)  # Por defecto 20 pasos si no se especifica
+    
     # Obtener datos históricos de agua
     monitoreos_agua = monitoreoC.obtener_datos_historicos_agua()
     
@@ -94,7 +91,7 @@ def obtener_proyeccion():
         # Preparar datos para proyección
         df_agua = monitoreoC.preparar_datos_para_proyeccion(monitoreos_agua)
         # Calcular proyección usando el método ARIMA 
-        proyeccion_agua = monitoreoC.arima(df_agua)
+        proyeccion_agua = monitoreoC.arima(df_agua, steps)
     else:
         proyeccion_agua = None
     
@@ -103,10 +100,9 @@ def obtener_proyeccion():
         # Preparar datos para proyección
         df_aire = monitoreoC.preparar_datos_para_proyeccion(monitoreos_aire)
         # Calcular proyección usando el método ARIMA 
-        proyeccion_aire = monitoreoC.arima(df_aire)
+        proyeccion_aire = monitoreoC.arima(df_aire, steps)
     else:
         proyeccion_aire = None
-    
     
     response_data = {
         "msg": "OK",
@@ -115,21 +111,13 @@ def obtener_proyeccion():
     }
     
     if proyeccion_agua is not None:
-        
         response_data["proyecciones"]["agua"] = [round(val, 6) for val in proyeccion_agua]
     else:
         response_data["proyecciones"]["agua"] = "No hay datos de monitoreo de agua."
     
     if proyeccion_aire is not None:
-        
         response_data["proyecciones"]["aire"] = [round(val, 6) for val in proyeccion_aire]
     else:
         response_data["proyecciones"]["aire"] = "No hay datos de monitoreo de aire."
 
     return make_response(jsonify(response_data), 200)
-
-@api_monitoreo.route('/data', methods=['POST'])
-def receive_data():
-    data = request.json
-    print(f"Received data: {data}")
-    return "Data received", 200

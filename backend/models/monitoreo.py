@@ -10,7 +10,6 @@ class Monitoreo(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     estado = db.Column(db.Boolean)
-    # Relación uno a muchos con Mota
     mota_id = db.Column(db.Integer, db.ForeignKey('mota.id'))
 
     @property
@@ -19,9 +18,9 @@ class Monitoreo(db.Model):
             'id': self.id,
             'external_id': self.external_id,
             'dato': self.dato,
-            'fecha': self.fecha,
-            'hora': self.hora,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
+            'fecha': self.fecha.isoformat(),
+            'hora': self.hora.strftime('%H:%M:%S'),
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat(),
             'estado': self.estado
         }

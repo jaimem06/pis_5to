@@ -1,23 +1,48 @@
 import { ApexOptions } from "apexcharts";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import DefaultSelectOption from "@/components/SelectOption/DefaultSelectOption";
+import { obtenerProyeccionMonitoreo } from "@/hooks/service_monitoreo";
+import Cookies from "js-cookie";
 
 const GraficaSensoresV2: React.FC = () => {
-  const series = [65, 34, 12, 56];
+  const [aguaCount, setAguaCount] = useState<number>(0);
+  const [aireCount, setAireCount] = useState<number>(0);
+  const [loading, setLoading] = useState(true);
+  const token = Cookies.get("token");
+
+  useEffect(() => {
+    const fetchProyeccion = async () => {
+      try {
+        const data = await obtenerProyeccionMonitoreo(token);
+        
+        if (data && data.proyecciones) {
+          const aguaCount = data.proyecciones.agua ? data.proyecciones.agua.length : 0;
+          const aireCount = data.proyecciones.aire ? data.proyecciones.aire.length : 0;
+          setAguaCount(aguaCount);
+          setAireCount(aireCount);
+        }
+        
+        setLoading(false);
+      } catch (error) {
+        console.error("Error al obtener la proyección:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchProyeccion();
+  }, [token]);
 
   const options: ApexOptions = {
     chart: {
       fontFamily: "Satoshi, sans-serif",
       type: "donut",
     },
-    colors: ["#5750F1", "#5475E5", "#8099EC", "#ADBCF2"],
-    labels: ["Ejemplo1", "Ejemplo2", "Ejemplo3", "Ejemplo4"],
+    colors: ["#5750F1", "#0ABEF9"],
+    labels: ["Agua", "Aire"],
     legend: {
       show: false,
       position: "bottom",
     },
-
     plotOptions: {
       pie: {
         donut: {
@@ -33,7 +58,7 @@ const GraficaSensoresV2: React.FC = () => {
               fontWeight: "400",
             },
             value: {
-              show: true,
+              show: false,
               fontSize: "28px",
               fontWeight: "bold",
             },
@@ -69,17 +94,18 @@ const GraficaSensoresV2: React.FC = () => {
       <div className="mb-9 justify-between gap-4 sm:flex">
         <div>
           <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
-            Aqui info adicional
+            Datos recabados
           </h4>
-        </div>
-        <div>
-          <DefaultSelectOption options={["Monthly", "Yearly"]} />
         </div>
       </div>
 
       <div className="mb-8">
         <div className="mx-auto flex justify-center">
-          <ReactApexChart options={options} series={series} type="donut" />
+          {loading ? (
+            <p>Cargando datos...</p>
+          ) : (
+            <ReactApexChart options={options} series={[aguaCount, aireCount]} type="donut" />
+          )}
         </div>
       </div>
 
@@ -89,8 +115,8 @@ const GraficaSensoresV2: React.FC = () => {
             <div className="flex w-full items-center">
               <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-blue"></span>
               <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
-                <span> Ejemplo1 </span>
-                <span> 65% </span>
+                <span> Agua </span>
+                <span> {aguaCount} registros </span>
               </p>
             </div>
           </div>
@@ -98,26 +124,8 @@ const GraficaSensoresV2: React.FC = () => {
             <div className="flex w-full items-center">
               <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-blue-light"></span>
               <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
-                <span> Ejemplo2 </span>
-                <span> 34% </span>
-              </p>
-            </div>
-          </div>
-          <div className="w-full px-7.5 sm:w-1/2">
-            <div className="flex w-full items-center">
-              <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-blue-light-2"></span>
-              <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
-                <span> Ejemplo3 </span>
-                <span> 45% </span>
-              </p>
-            </div>
-          </div>
-          <div className="w-full px-7.5 sm:w-1/2">
-            <div className="flex w-full items-center">
-              <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-blue-light-3"></span>
-              <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
-                <span> Ejemplo4 </span>
-                <span> 12% </span>
+                <span> Aire </span>
+                <span> {aireCount} registros </span>
               </p>
             </div>
           </div>

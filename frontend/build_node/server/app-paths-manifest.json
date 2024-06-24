@@ -1,7 +1,6 @@
 {
-  "/inicio-sesion/page": "app/inicio-sesion/page.js",
-  "/page": "app/page.js",
-  "/admin-usuario/[external]/page": "app/admin-usuario/[external]/page.js",
-  "/admin-usuario/page": "app/admin-usuario/page.js",
-  "/admin-usuario/nuevo/page": "app/admin-usuario/nuevo/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin-sensor/page": "app/admin-sensor/page.js",
+  "/ubicacion-sensor/page": "app/ubicacion-sensor/page.js",
+  "/page": "app/page.js"
 }
