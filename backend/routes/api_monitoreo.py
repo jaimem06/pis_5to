@@ -3,7 +3,7 @@ from controllers.monitoreoControl import MonitoreoControl
 from flask_expects_json import expects_json
 from controllers.utils.errors import Errors
 api_monitoreo = Blueprint("api_monitoreo", __name__)
-
+from flask_socketio import SocketIO, emit
 monitoreoC = MonitoreoControl()
 
 
@@ -127,3 +127,9 @@ def obtener_proyeccion():
         response_data["proyecciones"]["aire"] = "No hay datos de monitoreo de aire."
 
     return make_response(jsonify(response_data), 200)
+
+@api_monitoreo.route('/data', methods=['POST'])
+def receive_data():
+    data = request.json
+    print(f"Received data: {data}")
+    return "Data received", 200
