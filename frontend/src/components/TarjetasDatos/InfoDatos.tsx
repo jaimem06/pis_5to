@@ -115,8 +115,9 @@ const DataStatsOne: React.FC<dataStats> = () => {
               </div>
 
               <span
-                className={`flex items-center gap-1.5 text-body-sm font-medium ${item.growthRate > 0 ? "text-green" : "text-red"
-                  }`}
+                className={`flex items-center gap-1.5 text-body-sm font-medium ${
+                  item.growthRate > 0 ? "text-green" : "text-red"
+                }`}
               >
                 {item.growthRate}%
                 {item.growthRate > 0 ? (

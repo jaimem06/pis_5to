@@ -34,5 +34,5 @@ class Cuenta(db.Model):
             "correo": self.correo,
             "clave": self.clave,
             "estado": self.estado,
-            "external_id": self.external_id,
+            "external": self.external_id,
         }

@@ -55,8 +55,6 @@ class PersonaControl:
             db.session.commit()
 
             c.external_id = uuid.uuid4()
-            c.correo = data["correo"]
-            c.clave = hashlib.sha256(data["clave"].encode()).hexdigest()
             c.id_persona = persona.id
 
             db.session.merge(c)
@@ -67,6 +65,25 @@ class PersonaControl:
         else:
             return -1
 
+    #metodo para modificar credenciales de persona
+    def modificar_credenciales(self, data, external):
+        c = Cuenta.query.filter_by(correo=data["correo"]).first()
+        persona = Persona.query.filter_by(external_id=external).first()
+
+        if c and persona:
+            clave = hashlib.sha256(data["clave"].encode()).hexdigest()
+            if clave == c.clave:
+                c.clave = hashlib.sha256(data["nueva_clave"].encode()).hexdigest()
+                c.correo = data["nuevo_correo"]
+                c.external_id = uuid.uuid4()
+                
+                db.session.merge(c)
+                db.session.commit()
+                return c.id
+            else:
+                return -15
+        else:
+            return -1
     # Metodo para actualizar estado de cuenta de persona
     def actualizar_estado(self, external):
         persona = Persona.query.filter_by(external_id=external).first()

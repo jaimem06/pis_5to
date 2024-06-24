@@ -30,6 +30,7 @@ export default function Login() {
         console.log(info);
         Cookies.set('token', info.datos.token);
         Cookies.set('user', info.datos.user);
+        Cookies.set('external', info.datos.external);
         console.log(info.datos.user);
         swal({
           title: "Info",
