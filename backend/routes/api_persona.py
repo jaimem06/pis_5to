@@ -24,7 +24,7 @@ schema_persona = {
         },
         "clave": {
             "type": "string",
-            "pattern": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])\S{8,20}$",
+            #"pattern": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])\S{8,20}$",
         },
     },
     "required": ["nombre", "apellido", "correo", "clave"],

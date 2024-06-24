@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import TableMota from "@/components/Tables/TableMota";
 
 export const metadata: Metadata = {
   title:
@@ -12,9 +13,9 @@ const PageAdminSensor = () => {
   return (
     <DefaultLayout>
       <div className="mx-auto max-w-7xl">
-        <Breadcrumb pageName="Admin Sensores" />
-        <p>Aqui Tabla para Adminitrar Sensores</p>
+        <Breadcrumb pageName="Admintracion de Sensores" />
       </div>
+      <TableMota/>
     </DefaultLayout>
   );
 };

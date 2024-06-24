@@ -14,7 +14,7 @@ def after_request_func(response):
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
         response.headers.add('Access-Control-Allow-Headers', 'x-csrf-token')
         response.headers.add('Access-Control-Allow-Headers', 'Accept')
-        response.headers.add('Access-Control-Allow-Headers', 'X-Access-Token')
+        response.headers.add('Access-Control-Allow-Headers', 'X-Access-Tokens')
         response.headers.add('Access-Control-Allow-Methods',
         'GET, POST, OPTIONS, PUT, PATCH, DELETE')
         if origin:

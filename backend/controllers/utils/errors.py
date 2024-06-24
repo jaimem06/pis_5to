@@ -14,6 +14,7 @@ class Errors:
         "-12": "Correo invalido debe tener formato de: ejemplo@gmail.com",
         "-13": "El nombre y apellido solo puede contener letras",
         "-14": "El correo ya existe",
+        "-15": "La IP ya existe en otra mota",
     }
 
 class Errors_code:

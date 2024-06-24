@@ -9,15 +9,10 @@ export const POST = async (resource, data, token = "NONE") => {
             "Content-Type": "application/json"
         }
     }
-    if (token != "NONE") {
-        headers = {
-            headers: {
-                "Accept": "application/json",
-                "X-Access-Token": token
-            }
-        }
+    if (token !== "NONE") {
+        headers.headers["X-Access-Tokens"] = token;
     }
-    return await axios.post(URL + resource, data, headers)
+    return await axios.post(URL + resource, data, headers);
 }
 
 // Metodo GET
@@ -28,12 +23,7 @@ export const GET = async (resource, token = "NONE") => {
         }
     }
     if (token !== "NONE") {
-        let headers = {
-            headers: {
-                "Accept": "application/json",
-                "X-Access-Token": token,
-            }
-        }
+        headers.headers["X-Access-Tokens"] = token;
     }
     return await axios.get(URL + resource, headers);
 }

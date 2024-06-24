@@ -28,7 +28,7 @@ const config: Config = {
         "stroke-dark": "#27303E",
         dark: {
           DEFAULT: "#111928",
-          2: "#1F2A37",
+          2: "#2F2A37",
           3: "#374151",
           4: "#4B5563",
           5: "#6B7280",
@@ -46,6 +46,8 @@ const config: Config = {
           5: "#9CA3AF",
           6: "#6B7280",
           7: "#374151",
+          8: "#29333C",
+          9: "#83949E",
         },
         green: {
           DEFAULT: "#22AD5C",
@@ -59,6 +61,7 @@ const config: Config = {
             5: "#C2F3D6",
             6: "#DAF8E6",
             7: "#E9FBF0",
+            8: "#1C4443",
           },
         },
         red: {
@@ -82,6 +85,7 @@ const config: Config = {
             3: "#ADBCF2",
             4: "#C3CEF6",
             5: "#E1E8FF",
+            6: "#2C3E50",
           },
         },
         orange: {
