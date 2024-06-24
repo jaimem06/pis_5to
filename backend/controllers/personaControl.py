@@ -61,7 +61,7 @@ class PersonaControl:
             db.session.commit()
 
             # 5. Retornar id de persona
-            return persona.id
+            return persona.id, persona.external_id
         else:
             return -1
 
@@ -96,6 +96,7 @@ class PersonaControl:
                 else:
                     c.estado = True
                     estado = "ACTIVADA"
+                c.external_id = uuid.uuid4()
                 db.session.merge(c)
                 db.session.commit()
                 return c.id, estado

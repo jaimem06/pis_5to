@@ -159,11 +159,11 @@ def listar_external_id(external_id):
 def modificar(external):
 
     data = request.json
-    persona = personaC.modificar_persona(data, external)
+    persona,ext = personaC.modificar_persona(data, external)
 
     if persona >=0:
         return make_response(
-            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Datos modificados"}}),
+            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Datos modificados"},"external":ext}),
             200,
         )
     else:

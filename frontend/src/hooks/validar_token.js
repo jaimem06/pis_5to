@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { GET, POST } from './connection';
+import { GET } from './connection';
 
 export async function validar_token() {
     let datos = null;

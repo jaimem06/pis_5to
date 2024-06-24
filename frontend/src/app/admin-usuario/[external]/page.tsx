@@ -48,7 +48,6 @@ const FormularioPersona = () => {
   }, [external, setValue]);
 
   const enviar_data = (data: FormData) => {
-    try {
       //data["correo"]=persona.cuenta.correo;
       console.log(data);
       modificar_persona(data, external).then((info) => {
@@ -76,9 +75,6 @@ const FormularioPersona = () => {
           console.log("NO");
         }
       });
-    } catch (error) {
-      console.error("Error al modificar credenciales:", error);
-    }
   };
   const cancelar = () => {
     router.push("/admin-usuario");

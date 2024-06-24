@@ -2,7 +2,5 @@
   "/inicio-sesion/page": "app/inicio-sesion/page.js",
   "/page": "app/page.js",
   "/admin-usuario/page": "app/admin-usuario/page.js",
-  "/admin-usuario/[external]/page": "app/admin-usuario/[external]/page.js",
-  "/admin-usuario/c/[ext]/page": "app/admin-usuario/c/[ext]/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/admin-usuario/[external]/page": "app/admin-usuario/[external]/page.js"
 }

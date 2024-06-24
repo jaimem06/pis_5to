@@ -67,7 +67,7 @@ export default function Login() {
 
           <div className="inputBox">
             <input type="password" required {...register('clave')} />
-            <span>Contraseña</span>
+            <span>Clave</span>
           </div>
           <button type="submit" className="btnlogin">Iniciar Sesion</button>
         </div>

@@ -22,6 +22,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/admin-usuario/page.js"
     ],
+    "/admin-sensor/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin-sensor/page.js"
+    ],
     "/admin-usuario/[external]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",

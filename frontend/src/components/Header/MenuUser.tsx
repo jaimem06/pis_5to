@@ -4,42 +4,79 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
 import Cookies from "js-cookie";
-import { obtener_persona } from "@/hooks/servicio_persona";
+import { modificar_estado, obtener_persona } from "@/hooks/servicio_persona";
 import swal from "sweetalert";
 
 const MenuSettingsUser = () => {
   const ruta = useRouter();
-  const external = Cookies.get('external');
+  const external = Cookies.get("external");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   let [usuario, setUsuario] = useState([]);
 
   useEffect(() => {
-    obtener_persona(external).then((res) =>{
+    obtener_persona(external).then((res) => {
       if (res && res.code === 200) {
         setUsuario(res.datos);
-      }else{
+      } else {
         console.log("Error");
       }
     });
   }, [external]);
   //Cerrar sesion
-  function cerrarSesionAlert(){
-  swal({
-    title: "¿Estás seguro?",
-    text: "¿Deseas cerrar sesión?",
-    icon: "warning",
-    buttons: ["Cancelar", "Aceptar"],
-    dangerMode: true,
-  }).then((aceptar) => {
-    if (aceptar) {
-      cerrarSesion();
-    }else{
-      return;
-    }
-  });
+  function cerrarSesionAlert() {
+    swal({
+      title: "¿Estás seguro?",
+      text: "¿Deseas cerrar sesión?",
+      icon: "warning",
+      buttons: ["Cancelar", "Aceptar"],
+      dangerMode: true,
+    }).then((aceptar) => {
+      if (aceptar) {
+        swal({});
+        cerrarSesion();
+      } else {
+        return;
+      }
+    });
   }
 
-  function cerrarSesion(){
+  //Desactivar cuenta
+  function desactivarCuentaAlert() {
+    swal({
+      title: "¿Estás seguro?",
+      text: "Esta accion no se puede deshacer, ¿Deseas desactivar tu cuenta?",
+      icon: "warning",
+      buttons: ["Cancelar", "Aceptar"],
+      dangerMode: true,
+    }).then((aceptar) => {
+      if (aceptar) {
+        modificar_estado(external).then((res) => {
+          if (res && res.code === 200) {
+            swal({
+              title: "INFO",
+              text: res.data.tag,
+              icon: "success",
+              button: "Aceptar",
+            });
+            cerrarSesion();
+          } else {
+            swal({
+              title: "ERROR",
+              text: res.datos.error,
+              icon: "error",
+              button: "Aceptar",
+            });
+            console.log("Cuenta desactivada");
+          }
+        });
+      } else {
+        console.log("Error");
+        return;
+      }
+    });
+  }
+
+  function cerrarSesion() {
     Cookies.remove("token");
     Cookies.remove("user");
     Cookies.remove("external");
@@ -55,7 +92,9 @@ const MenuSettingsUser = () => {
         href="#"
       >
         <span className="flex items-center gap-2 font-medium text-dark dark:text-dark-6">
-          <span className="hidden lg:block">{usuario.nombre+" "+usuario.apellido}</span>
+          <span className="hidden lg:block">
+            {usuario.nombre + " " + usuario.apellido}
+          </span>
 
           <svg
             className={`fill-current duration-200 ease-in ${dropdownOpen && "rotate-180"}`}
@@ -93,7 +132,7 @@ const MenuSettingsUser = () => {
           <ul className="flex flex-col gap-1 border-y-[0.5px] border-stroke p-2.5 dark:border-dark-3">
             <li>
               <Link
-                href={"/admin-usuario/"+external}
+                href={"/admin-usuario/" + external}
                 className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base"
               >
                 <svg
@@ -120,9 +159,43 @@ const MenuSettingsUser = () => {
                 Configurar Perfil
               </Link>
             </li>
+
+            <button
+              className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-red-500 duration-300 ease-in-out hover:bg-red-600 hover:text-red-800 dark:hover:bg-red-600 dark:hover:text-white lg:text-base"
+              onClick={() => desactivarCuentaAlert()}
+            >
+              <svg
+                className="fill-current"
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clipPath="url(#clip0_1815_13085)">
+                  <path
+                    d="M9 0.9375C4.62534 0.9375 1.125 4.43784 1.125 8.8125C1.125 13.1872 4.62534 16.6875 9 16.6875C13.3747 16.6875 16.875 13.1872 16.875 8.8125C16.875 4.43784 13.3747 0.9375 9 0.9375ZM9 15.5625C5.26439 15.5625 2.25 12.5481 2.25 8.8125C2.25 5.07689 5.26439 2.0625 9 2.0625C12.7356 2.0625 15.75 5.07689 15.75 8.8125C15.75 12.5481 12.7356 15.5625 9 15.5625Z"
+                    fill=""
+                  />
+                  <path
+                    d="M11.0864 5.58974C10.8152 5.31852 10.3586 5.31852 10.0874 5.58974L9 6.67714L7.91261 5.58974C7.64139 5.31852 7.18483 5.31852 6.91361 5.58974C6.64239 5.86096 6.64239 6.31752 6.91361 6.58874L8.00101 7.67614L6.91361 8.76354C6.64239 9.03476 6.64239 9.49132 6.91361 9.76254C7.18483 10.0338 7.64139 10.0338 7.91261 9.76254L9 8.67514L10.0874 9.76254C10.3586 10.0338 10.8152 10.0338 11.0864 9.76254C11.3576 9.49132 11.3576 9.03476 11.0864 8.76354L9.99901 7.67614L11.0864 6.58874C11.3576 6.31752 11.3576 5.86096 11.0864 5.58974Z"
+                    fill=""
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_1815_13085">
+                    <rect width="18" height="18" rx="5" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+              Desactivar Cuenta
+            </button>
           </ul>
           <div className="p-2.5">
-            <button className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base" onClick={()=>cerrarSesionAlert()}>
+            <button
+              className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base"
+              onClick={() => cerrarSesionAlert()}
+            >
               <svg
                 className="fill-current"
                 width="18"
