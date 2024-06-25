@@ -60,7 +60,7 @@ export async function get_tipos(token){
        datos = await GET('listarTipos',token);
     } catch (error) {
        console.log(error.response.data);
-       return{"code": 500}
+       return[];
     }
-    return datos.data;
+    return datos.data || [] ;
 }

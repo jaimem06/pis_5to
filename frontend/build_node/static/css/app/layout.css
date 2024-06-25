@@ -854,6 +854,9 @@ body{
 .mt-\[5px\]{
   margin-top: 5px;
 }
+.ml-2{
+  margin-left: 0.5rem;
+}
 .\!block{
   display: block !important;
 }
@@ -1648,6 +1651,10 @@ body{
 .py-px{
   padding-top: 1px;
   padding-bottom: 1px;
+}
+.px-4\.5{
+  padding-left: 1.125rem;
+  padding-right: 1.125rem;
 }
 .pb-1{
   padding-bottom: 0.25rem;
