@@ -1,33 +1,83 @@
 import { ApexOptions } from "apexcharts";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import DefaultSelectOption from "@/components/SelectOption/DefaultSelectOption";
+import { obtenerProyeccionMonitoreo } from "@/hooks/service_monitoreo";
+import Cookies from "js-cookie";
 
 const GraficaSensores: React.FC = () => {
-  const series = [
+  const [proyeccion, setProyeccion] = useState<any>(null);
+  const [chartHeight, setChartHeight] = useState<number>(310);
+  const [scrollPosition, setScrollPosition] = useState<number>(0);
+  const [projectionSteps, setProjectionSteps] = useState<number>(3); 
+
+  const token = Cookies.get("token");
+
+  useEffect(() => {
+    const fetchProyeccion = async () => {
+      try {
+        const data = await obtenerProyeccionMonitoreo(token, projectionSteps); 
+        console.log(data);
+        setProyeccion(data.proyecciones);
+      } catch (error) {
+        console.error("Error al obtener la proyección:", error);
+      }
+    };
+
+    fetchProyeccion();
+  }, [projectionSteps]); // Proyeciones de los dias
+
+  const transformDataToTimeUnit = (data: any) => {
+    const transformedData: any = {
+      agua: [],
+      aire: [],
+    };
+    if (data.agua && Array.isArray(data.agua)) {
+      transformedData.agua = data.agua;
+    }
+    if (data.aire && Array.isArray(data.aire)) {
+      transformedData.aire = data.aire;
+    }
+    return transformedData;
+  };
+
+  const handleProjectionStepsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setProjectionSteps(Number(event.target.value));
+  };
+
+  const categories = Array.from({ length: projectionSteps }, (_, i) => (i + 1).toString());
+  const series = proyeccion ? [
     {
-      name: "Received Amount",
-      data: [0, 20, 35, 45, 35, 55, 65, 50, 65, 75, 60, 75],
+      name: "agua",
+      data: transformDataToTimeUnit(proyeccion).agua.map(
+        (val: number) => Math.round(val * 100) / 100
+      ),
     },
     {
-      name: "Due Amount",
-      data: [15, 9, 17, 32, 25, 68, 80, 68, 84, 94, 74, 62],
+      name: "aire",
+      data: transformDataToTimeUnit(proyeccion).aire.map(
+        (val: number) => Math.round(val * 100) / 100
+      ),
     },
-  ];
+  ] : [];
 
   const options: ApexOptions = {
     legend: {
-      show: false,
+      show: true,
       position: "top",
       horizontalAlign: "left",
     },
     colors: ["#5750F1", "#0ABEF9"],
     chart: {
       fontFamily: "Satoshi, sans-serif",
-      height: 310,
+      height: chartHeight,
       type: "area",
       toolbar: {
-        show: false,
+        show: true,
+        tools: {
+          zoom: true,
+          zoomin: true,
+          zoomout: true,
+        },
       },
     },
     fill: {
@@ -57,7 +107,6 @@ const GraficaSensores: React.FC = () => {
     stroke: {
       curve: "smooth",
     },
-
     markers: {
       size: 0,
     },
@@ -79,37 +128,25 @@ const GraficaSensores: React.FC = () => {
     },
     tooltip: {
       fixed: {
-        enabled: !1,
+        enabled: false,
       },
       x: {
-        show: !1,
+        show: false,
       },
       y: {
         title: {
-          formatter: function (e) {
+          formatter: function () {
             return "";
           },
         },
       },
       marker: {
-        show: !1,
+        show: false,
       },
     },
     xaxis: {
       type: "category",
-      categories: [
-        "Lun",
-        "Mar",
-        "Mier",
-        "Jue",
-        "Vier",
-        "Lun",
-        "Mar",
-        "Mier",
-        "Jue",
-        "Vier",
-        "Lun",
-      ],
+      categories: categories, 
       axisBorder: {
         show: false,
       },
@@ -134,36 +171,40 @@ const GraficaSensores: React.FC = () => {
             Datos recabados:
           </h4>
         </div>
-        <div className="flex items-center gap-2.5">
-          <p className="font-medium uppercase text-dark dark:text-dark-6">
-            Ordenar por:
-          </p>
-          <DefaultSelectOption options={["Dias", "Horas"]} />
-        </div>
       </div>
-      <div>
-        <div className="-ml-4 -mr-5">
-          <ReactApexChart
-            options={options}
-            series={series}
-            type="area"
-            height={310}
-          />
-        </div>
+      <div className="mb-4">
+        <label htmlFor="projection-steps">Cantidad de días para proyección: </label>
+        <input
+          id="projection-steps"
+          type="number"
+          min="1"
+          max="100"
+          value={projectionSteps}
+          onChange={handleProjectionStepsChange}
+          className="ml-2 p-1 border rounded"
+        />
       </div>
-
-      <div className="flex flex-col gap-2 text-center xsm:flex-row xsm:gap-0">
-        <div className="border-stroke dark:border-dark-3 xsm:w-1/2 xsm:border-r">
-          <p className="font-medium">Promedio datos por Dia:</p>
-          <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            5,70
-          </h4>
-        </div>
-        <div className="xsm:w-1/2">
-          <p className="font-medium">Promedio datos por Hora:</p>
-          <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            2,43
-          </h4>
+      <div className="relative overflow-x-auto">
+        <div
+          className="-ml-4 -mr-5"
+          style={{ transform: `translateX(${scrollPosition}px)` }}
+        >
+          {proyeccion ? (
+            <ReactApexChart
+              options={{
+                ...options,
+                xaxis: {
+                  ...options.xaxis,
+                  categories: categories,
+                },
+              }}
+              series={series}
+              type="area"
+              height={chartHeight}
+            />
+          ) : (
+            <p>Cargando proyección...</p>
+          )}
         </div>
       </div>
     </div>

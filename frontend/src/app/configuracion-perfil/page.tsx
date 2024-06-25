@@ -2,7 +2,6 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
-import SettingBoxes from "@/components/SettingBoxes";
 
 export const metadata: Metadata = {
   title:
@@ -15,7 +14,6 @@ const ConfiguracionPerfil = () => {
     <DefaultLayout>
       <div className="mx-auto w-full max-w-[1080px]">
         <Breadcrumb pageName="Configuracion Perfil" />
-        <SettingBoxes />
       </div>
     </DefaultLayout>
   );
