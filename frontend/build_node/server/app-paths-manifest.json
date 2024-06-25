@@ -1,4 +1,4 @@
 {
-  "/inicio-sesion/page": "app/inicio-sesion/page.js",
+  "/page": "app/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js"
 }

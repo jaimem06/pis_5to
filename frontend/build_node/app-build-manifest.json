@@ -1,10 +1,9 @@
 {
   "pages": {
-    "/inicio-sesion/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/inicio-sesion/page.css",
-      "static/chunks/app/inicio-sesion/page.js"
+      "static/chunks/app/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
