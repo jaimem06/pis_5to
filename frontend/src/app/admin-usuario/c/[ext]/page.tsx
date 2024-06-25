@@ -84,6 +84,7 @@ const FormularioCredenciales = () => {
           timer: 6000,
         });
         router.push("/admin-usuario");
+        router.refresh();
       } else {
         swal({
           title: "ERROR",

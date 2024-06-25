@@ -63,7 +63,7 @@ const FormularioPersona = () => {
             closeOnEsc: true,
           });
           router.push("/admin-usuario");
-          //router.refresh();
+          router.refresh();
         } else {
           swal({
             title: "ERROR",
