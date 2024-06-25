@@ -64,7 +64,7 @@ const TablePersona = () => {
             if (res && res.code === 200) {
               obtener_usuarios();
               swal({
-                title: "INFO",
+                title: "Exito",
                 text: res.data.tag,
                 icon: "success",
                 button: "Aceptar",
@@ -110,7 +110,7 @@ const TablePersona = () => {
             if (res && res.code === 200) {
               obtener_usuarios();
               swal({
-                title: "INFO",
+                title: "EXITO",
                 text: res.data.tag,
                 icon: "success",
                 button: "Aceptar",

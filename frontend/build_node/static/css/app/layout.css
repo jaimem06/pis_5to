@@ -818,6 +818,9 @@ body{
 .mb-9{
   margin-bottom: 2.25rem;
 }
+.ml-2{
+  margin-left: 0.5rem;
+}
 .mr-2{
   margin-right: 0.5rem;
 }
@@ -853,9 +856,6 @@ body{
 }
 .mt-\[5px\]{
   margin-top: 5px;
-}
-.ml-2{
-  margin-left: 0.5rem;
 }
 .\!block{
   display: block !important;
@@ -949,9 +949,6 @@ body{
 }
 .w-0\.5{
   width: 0.125rem;
-}
-.w-100{
-  width: 25rem;
 }
 .w-14{
   width: 3.5rem;
@@ -1412,14 +1409,6 @@ body{
   --tw-bg-opacity: 1;
   background-color: rgb(84 117 229 / var(--tw-bg-opacity));
 }
-.bg-blue-light-2{
-  --tw-bg-opacity: 1;
-  background-color: rgb(128 153 236 / var(--tw-bg-opacity));
-}
-.bg-blue-light-3{
-  --tw-bg-opacity: 1;
-  background-color: rgb(173 188 242 / var(--tw-bg-opacity));
-}
 .bg-dark{
   --tw-bg-opacity: 1;
   background-color: rgb(17 25 40 / var(--tw-bg-opacity));
@@ -1556,6 +1545,10 @@ body{
   padding-left: 1rem;
   padding-right: 1rem;
 }
+.px-4\.5{
+  padding-left: 1.125rem;
+  padding-right: 1.125rem;
+}
 .px-5{
   padding-left: 1.25rem;
   padding-right: 1.25rem;
@@ -1651,10 +1644,6 @@ body{
 .py-px{
   padding-top: 1px;
   padding-bottom: 1px;
-}
-.px-4\.5{
-  padding-left: 1.125rem;
-  padding-right: 1.125rem;
 }
 .pb-1{
   padding-bottom: 0.25rem;
@@ -1779,10 +1768,6 @@ body{
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
-.text-xl{
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-}
 .font-bold{
   font-weight: 700;
 }
@@ -1794,9 +1779,6 @@ body{
 }
 .font-semibold{
   font-weight: 600;
-}
-.uppercase{
-  text-transform: uppercase;
 }
 .leading-6{
   line-height: 1.5rem;
@@ -3432,25 +3414,6 @@ input[type="search"]::-webkit-search-cancel-button{
 
   .\32xsm\:gap-4{
     gap: 1rem;
-  }
-}
-
-@media (min-width: 425px){
-
-  .xsm\:w-1\/2{
-    width: 50%;
-  }
-
-  .xsm\:flex-row{
-    flex-direction: row;
-  }
-
-  .xsm\:gap-0{
-    gap: 0px;
-  }
-
-  .xsm\:border-r{
-    border-right-width: 1px;
   }
 }
 

@@ -20,35 +20,54 @@ interface FormData {
 const FormularioCredenciales = () => {
   const router = useRouter();
   const external = useParams().ext;
+  const expresion_email = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+  const expresion_clave =
+    /^(?=.*[0-9])(?=.*[!@#~=+?$%^&*])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d!@#~=+?$%^&*]{8,20}$/;
 
   const validationSchema = Yup.object().shape({
-    correo: Yup.string().trim().email("Correo inválido")
-      .required("El correo actual es requerido"),
-    nuevo_correo: Yup.string().trim()
+    correo: Yup.string()
+      .trim()
       .email("Correo inválido")
+      .matches(expresion_email, "Correo incorrecto")
+      .required("El correo actual es obligatorio"),
+    nuevo_correo: Yup.string()
+      .trim()
+      .email("Correo inválido")
+      .matches(expresion_email, "Correo incorrecto")
       .notOneOf(
         [Yup.ref("correo")],
         "El nuevo correo debe ser diferente al actual",
       )
-      .required("El nuevo correo es requerido"),
-    clave: Yup.string().trim().matches(
-      /^(?=.*[0-9])(?=.*[!@#~=+?$%^&*])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d!@#~=+?$%^&*]{8,20}$/,
-      "La clave debe contener al menos una mayúscula, una minúscula, un número y un carácter especial",
-    ).min(8,"La clave debe tener al menos 8 caracteres alfanumericos").max(20,"La clave no debe tener mas de 20 caracteres alfanumericos").required("La clave actual es requerida"),
-    nueva_clave: Yup.string().trim()
+      .required("El nuevo correo es obligatorio"),
+    clave: Yup.string()
+      .trim()
+      .matches(
+        expresion_clave,
+        "La clave debe contener al menos una mayúscula, una minúscula, un número y un carácter especial",
+      )
+      .min(8, "La clave debe tener al menos 8 caracteres alfanumericos")
+      .max(20, "La clave no debe tener mas de 20 caracteres alfanumericos")
+      .required("La clave actual es obligatoria"),
+    nueva_clave: Yup.string()
+      .trim()
       .notOneOf(
         [Yup.ref("clave")],
         "La nueva clave debe ser diferente a la actual",
       )
-      .min(8, "La nueva clave debe tener al menos 8 caracteres alfanumericos").max(20, "La nueva clave no debe tener mas de 20 caracteres alfanumericos")
+      .min(8, "La nueva clave debe tener al menos 8 caracteres alfanumericos")
+      .max(
+        20,
+        "La nueva clave no debe tener mas de 20 caracteres alfanumericos",
+      )
       .matches(
-        /^(?=.*[0-9])(?=.*[!@#~=+?$%^&*])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d!@#~=+?$%^&*]{8,20}$/,
+        expresion_clave,
         "La clave debe contener al menos una mayúscula, una minúscula, un número y un carácter especial",
       )
-      .required("La nueva clave es requerida"),
-    confirmar_clave: Yup.string().trim()
+      .required("La nueva clave es obligatoria"),
+    confirmar_clave: Yup.string()
+      .trim()
       .oneOf([Yup.ref("nueva_clave")], "Las claves deben coincidir")
-      .required("La confirmación de la clave es requerida"),
+      .required("La confirmación de la clave es obligatoria"),
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -59,7 +78,7 @@ const FormularioCredenciales = () => {
     modificar_credenciales(data, external).then((info) => {
       if (info && info.code === 200) {
         swal({
-          title: "Éxito",
+          title: "Credenciales Modificadas Correctamente",
           text: info.data.tag,
           icon: "success",
           timer: 6000,
@@ -67,7 +86,7 @@ const FormularioCredenciales = () => {
         router.push("/admin-usuario");
       } else {
         swal({
-          title: "Error",
+          title: "ERROR",
           text: info.datos.error,
           icon: "error",
           timer: 6000,
@@ -121,10 +140,10 @@ const FormularioCredenciales = () => {
               placeholder="Ingrese su correo actual"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
-            {errors.correo && (
-              <div className="text-danger mt-1">{errors.correo?.message}</div>
-            )}
           </div>
+          {errors.correo && (
+            <div className="text-danger mt-1">{errors.correo?.message}</div>
+          )}
         </div>
 
         <div className="mb-4">
@@ -159,12 +178,12 @@ const FormularioCredenciales = () => {
               placeholder="Ingrese su correo nuevo"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
-            {errors.nuevo_correo && (
-              <div className="text-danger mt-1">
-                {errors.nuevo_correo?.message}
-              </div>
-            )}
           </div>
+          {errors.nuevo_correo && (
+            <div className="text-danger mt-1">
+              {errors.nuevo_correo?.message}
+            </div>
+          )}
         </div>
 
         <div className="mb-4">
@@ -199,10 +218,10 @@ const FormularioCredenciales = () => {
               placeholder="Ingrese su clave actual"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
-            {errors.clave && (
-              <div className="text-danger mt-1">{errors.clave?.message}</div>
-            )}
           </div>
+          {errors.clave && (
+            <div className="text-danger mt-1">{errors.clave?.message}</div>
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -236,12 +255,12 @@ const FormularioCredenciales = () => {
               placeholder="Ingrese su nueva clave"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
-            {errors.nueva_clave && (
-              <div className="text-danger mt-1">
-                {errors.nueva_clave?.message}
-              </div>
-            )}
           </div>
+          {errors.nueva_clave && (
+            <div className="text-danger mt-1">
+              {errors.nueva_clave?.message}
+            </div>
+          )}
         </div>
 
         <div className="mb-4">
@@ -276,12 +295,12 @@ const FormularioCredenciales = () => {
               placeholder="Confirme su nueva clave"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
-            {errors.confirmar_clave && (
-              <div className="text-danger mt-1">
-                {errors.confirmar_clave?.message}
-              </div>
-            )}
           </div>
+          {errors.confirmar_clave && (
+            <div className="text-danger mt-1">
+              {errors.confirmar_clave?.message}
+            </div>
+          )}
         </div>
 
         <div className="flex justify-end gap-3">

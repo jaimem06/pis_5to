@@ -33,8 +33,8 @@ export default function Login() {
         Cookies.set('external', info.datos.external);
         console.log(info.datos.user);
         swal({
-          title: "Info",
-          text: "Bienvenido " + info.datos.user,
+          title: "Bienvenido",
+          text: info.datos.user,
           icon: "success",
           timer: 4000,
           closeOnEsc: true,

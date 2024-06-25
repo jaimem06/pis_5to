@@ -20,13 +20,14 @@ interface FormData {
 const FormularioPersona = () => {
   const router = useRouter();
   const external = useParams().external;
+  const expresion_email = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
   let [persona, setPersona] = useState(null);
   console.log(external);
 
   const validationSchema = Yup.object().shape({
-    nombre: Yup.string().trim().required("El nombre es requerido"),
-    apellido: Yup.string().trim().required("El apellido es requerido"),
-    correo: Yup.string().trim().email().required("El correo es requerido"),
+    nombre: Yup.string().trim().required("El nombre es obligatorio"),
+    apellido: Yup.string().trim().required("El apellido es obligatorio"),
+    correo: Yup.string().trim().email().matches(expresion_email,"Correo incorrecto").required("El correo es obligatorio"),
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -55,7 +56,7 @@ const FormularioPersona = () => {
         if (info && info.code === 200) {
           console.log(info);
           swal({
-            title: "Info",
+            title: "Modificado Correctamente",
             text: info.data.tag,
             icon: "success",
             timer: 6000,
@@ -65,7 +66,7 @@ const FormularioPersona = () => {
           //router.refresh();
         } else {
           swal({
-            title: "Error",
+            title: "ERROR",
             text: info.datos.error,
             icon: "error",
             timer: 6000,
@@ -128,10 +129,10 @@ const FormularioPersona = () => {
             defaultValue={persona && persona.nombre}
             className="w-full rounded border border-[#eee] px-3 py-2 dark:border-dark-3w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
           />
+          </div>
           {errors.nombre && (
             <div className="text-danger mt-1">{errors.nombre?.message}</div>
           )}
-          </div>
         </div>
         <div className="mb-4">
           <label
@@ -172,10 +173,10 @@ const FormularioPersona = () => {
             defaultValue={persona && persona.apellido}
             className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
           />
+          </div>
           {errors && (
             <div className="text-danger mt-1">{errors.apellido?.message}</div>
           )}
-          </div>
         </div>
 
         <div className="flex justify-end gap-3">
