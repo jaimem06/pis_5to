@@ -16,13 +16,14 @@ class Persona(db.Model):
     #uselist = False sirve para especificar que una persona solo se relaciona con un objeto cuenta
     cuenta = db.relationship("Cuenta", backref="persona", uselist=False)
     mota = db.relationship('Mota', secondary=personas_motas, back_populates='persona', lazy=True)
+
     @property
     def serialize(self):
         return {
-            "external_id": self.external_id,
+            "external": self.external_id,
             "nombre": self.nombre,
             "apellido": self.apellido,
-            "cuenta": self.cuenta.serialize if self.cuenta else "No tiene cuenta",
+            "cuenta": self.cuenta.serialize if self.cuenta else None,
         }
 
     def copy(self):
