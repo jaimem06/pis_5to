@@ -60,7 +60,7 @@ const FormularioPersona = () => {
         router.refresh();
       } else {
         swal({
-          title: "ERROR",
+          title: "Error",
           text: info.datos.error,
           icon: "error",
           timer: 6000,

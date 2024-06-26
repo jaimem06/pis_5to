@@ -27,7 +27,11 @@ const FormularioPersona = () => {
   const validationSchema = Yup.object().shape({
     nombre: Yup.string().trim().required("El nombre es obligatorio"),
     apellido: Yup.string().trim().required("El apellido es obligatorio"),
-    correo: Yup.string().trim().email().matches(expresion_email,"Correo incorrecto").required("El correo es obligatorio"),
+    correo: Yup.string()
+      .trim()
+      .email()
+      .matches(expresion_email, "Correo incorrecto")
+      .required("El correo es obligatorio"),
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -49,33 +53,33 @@ const FormularioPersona = () => {
   }, [external, setValue]);
 
   const enviar_data = (data: FormData) => {
-      //data["correo"]=persona.cuenta.correo;
-      console.log(data);
-      modificar_persona(data, external).then((info) => {
+    //data["correo"]=persona.cuenta.correo;
+    console.log(data);
+    modificar_persona(data, external).then((info) => {
+      console.log(info);
+      if (info && info.code === 200) {
         console.log(info);
-        if (info && info.code === 200) {
-          console.log(info);
-          swal({
-            title: "Modificado Correctamente",
-            text: info.data.tag,
-            icon: "success",
-            timer: 6000,
-            closeOnEsc: true,
-          });
-          router.push("/admin-usuario");
-          router.refresh();
-        } else {
-          swal({
-            title: "ERROR",
-            text: info.datos.error,
-            icon: "error",
-            timer: 6000,
-            closeOnEsc: true,
-          });
-          console.log(info);
-          console.log("NO");
-        }
-      });
+        swal({
+          title: "Modificado Correctamente",
+          text: info.data.tag,
+          icon: "success",
+          timer: 6000,
+          closeOnEsc: true,
+        });
+        router.push("/admin-usuario");
+        router.refresh();
+      } else {
+        swal({
+          title: "Error",
+          text: info.datos.error,
+          icon: "error",
+          timer: 6000,
+          closeOnEsc: true,
+        });
+        console.log(info);
+        console.log("NO");
+      }
+    });
   };
   const cancelar = () => {
     router.push("/admin-usuario");
@@ -121,14 +125,14 @@ const FormularioPersona = () => {
                 />
               </svg>
             </span>
-          <input
-            type="text"
-            id="nombre"
-            required
-            {...register("nombre")}
-            defaultValue={persona && persona.nombre}
-            className="w-full rounded border border-[#eee] px-3 py-2 dark:border-dark-3w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-          />
+            <input
+              type="text"
+              id="nombre"
+              required
+              {...register("nombre")}
+              defaultValue={persona && persona.nombre}
+              className="dark:border-dark-3w-full w-full rounded rounded-[7px] border border-[1.5px] border-[#eee] border-stroke bg-white px-3 py-2 py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+            />
           </div>
           {errors.nombre && (
             <div className="text-danger mt-1">{errors.nombre?.message}</div>
@@ -165,14 +169,14 @@ const FormularioPersona = () => {
                 />
               </svg>
             </span>
-          <input
-            type="text"
-            id="apellido"
-            required
-            {...register("apellido")}
-            defaultValue={persona && persona.apellido}
-            className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-          />
+            <input
+              type="text"
+              id="apellido"
+              required
+              {...register("apellido")}
+              defaultValue={persona && persona.apellido}
+              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+            />
           </div>
           {errors && (
             <div className="text-danger mt-1">{errors.apellido?.message}</div>
@@ -180,7 +184,7 @@ const FormularioPersona = () => {
         </div>
 
         <div className="flex justify-end gap-3">
-            <button
+          <button
             type="button"
             onClick={cancelar}
             className="flex justify-center rounded-[7px] border border-stroke px-6 py-[7px] font-medium text-dark hover:shadow-1 dark:border-dark-3 dark:text-white"

@@ -8,7 +8,7 @@ const TablePersona = () => {
   const ruta = useRouter();
   const ext = Cookies.get("external");
   let [data, setData] = useState(null);
-  
+
   //funcion para obtener la lista de usuarios
   const obtener_usuarios = () => {
     listar_personas().then((usuarios) => {
@@ -33,7 +33,7 @@ const TablePersona = () => {
     ruta.push("admin-usuario/nuevo");
   }
   //funcion para cambiar el estado de la cuenta del usuario
-  function cambiar_estado(external:string, estado: boolean) {
+  function cambiar_estado(external: string, estado: boolean) {
     if (estado === true) {
       swal({
         title: "¿Está seguro de desactivar la cuenta?",
@@ -72,7 +72,7 @@ const TablePersona = () => {
               cerrar_sesion(external);
             } else {
               swal({
-                title: "ERROR",
+                title: "Error",
                 text: res.datos.error,
                 icon: "error",
                 button: "Aceptar",
@@ -110,14 +110,14 @@ const TablePersona = () => {
             if (res && res.code === 200) {
               obtener_usuarios();
               swal({
-                title: "EXITO",
+                title: "Exito",
                 text: res.data.tag,
                 icon: "success",
                 button: "Aceptar",
               });
             } else {
               swal({
-                title: "ERROR",
+                title: "Error",
                 text: res.datos.error,
                 icon: "error",
                 button: "Aceptar",
@@ -130,11 +130,12 @@ const TablePersona = () => {
   }
 
   function cerrar_sesion(external: String) {
-    if(ext === external)
-    Cookies.remove("external");
-    Cookies.remove("token");
-    Cookies.remove("user");
-    ruta.push("/inicio-sesion");
+    if (ext === external) {
+      Cookies.remove("external");
+      Cookies.remove("token");
+      Cookies.remove("user");
+      ruta.push("/inicio-sesion");
+    }
   }
 
   return (
@@ -167,7 +168,7 @@ const TablePersona = () => {
           style={{ maxHeight: "calc(100vh - 200px)" }}
         >
           <table className="w-full table-auto">
-            <thead className="sticky top-0 bg-[#F7F9FC] text-left dark:bg-dark-2 z-10">
+            <thead className="sticky top-0 z-10 bg-[#F7F9FC] text-left dark:bg-dark-2">
               <tr className="bg-[#F7F9FC] text-left dark:bg-dark-2">
                 <th className="min-w-[220px] px-4 py-4 font-medium text-dark dark:text-white xl:pl-7.5">
                   Usuario
@@ -260,7 +261,13 @@ const TablePersona = () => {
                               persona.cuenta.estado,
                             )
                           }
-                          style={{ cursor: "pointer", opacity: "1", color: persona.cuenta.estado ? "#D34053" : "#219653"}}
+                          style={{
+                            cursor: "pointer",
+                            opacity: "1",
+                            color: persona.cuenta.estado
+                              ? "#D34053"
+                              : "#219653",
+                          }}
                         >
                           <svg
                             className="fill-current"

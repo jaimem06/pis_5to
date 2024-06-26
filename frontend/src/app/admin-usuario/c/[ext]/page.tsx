@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { modificar_credenciales } from "@/hooks/servicio_persona";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import Cookies from "js-cookie";
 
 interface FormData {
   correo: string;
@@ -83,17 +84,29 @@ const FormularioCredenciales = () => {
           icon: "success",
           timer: 6000,
         });
-        router.push("/admin-usuario");
-        router.refresh();
+        redireccionar(external);
       } else {
         swal({
-          title: "ERROR",
+          title: "Error",
           text: info.datos.error,
           icon: "error",
           timer: 6000,
         });
       }
     });
+  };
+
+  const redireccionar = (ext) => {
+    if (external === ext) {
+      Cookies.remove("token");
+      Cookies.remove("external");
+      Cookies.remove("user");
+      router.push("/inicio-sesion");
+      router.refresh();
+    } else {
+      router.push("/admin-usuario");
+      router.refresh();
+    }
   };
 
   const cancelar = () => {

@@ -52,7 +52,7 @@ const MenuSettingsUser = () => {
         modificar_estado(external).then((res) => {
           if (res && res.code === 200) {
             swal({
-              title: "INFO",
+              title: "Exito",
               text: res.data.tag,
               icon: "success",
               button: "Aceptar",
@@ -60,7 +60,7 @@ const MenuSettingsUser = () => {
             cerrarSesion();
           } else {
             swal({
-              title: "ERROR",
+              title: "Error",
               text: res.datos.error,
               icon: "error",
               button: "Aceptar",
@@ -81,6 +81,7 @@ const MenuSettingsUser = () => {
     Cookies.remove("external");
 
     ruta.push("/inicio-sesion");
+    ruta.refresh();
   }
 
   return (
