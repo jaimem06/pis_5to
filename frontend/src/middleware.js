@@ -38,7 +38,7 @@ export async function middleware(request) {
 
 export const config = {
   matcher: [
-    '/admin-usuario',
+    '/admin-usuario/:path*',//aplica para todas las rutas que empiecen con /admin-usuario
     '/admin-sensor',
     '/ubicacion-sensor',
     '/configuracion-perfil',
