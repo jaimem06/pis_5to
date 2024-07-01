@@ -1,10 +1,10 @@
 {
   "pages": {
-    "/inicio-sesion/page": [
+    "/admin-sensor/new/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/inicio-sesion/page.css",
-      "static/chunks/app/inicio-sesion/page.js"
+      "static/css/app/admin-sensor/new/page.css",
+      "static/chunks/app/admin-sensor/new/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -12,20 +12,15 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
+    "/admin-sensor/[external]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/admin-sensor/[external]/page.js"
     ],
-    "/admin-usuario/page": [
+    "/admin-sensor/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin-usuario/page.js"
-    ],
-    "/admin-usuario/[external]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin-usuario/[external]/page.js"
+      "static/chunks/app/admin-sensor/page.js"
     ]
   }
 }

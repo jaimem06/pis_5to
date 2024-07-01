@@ -1,4 +1,4 @@
-// File: /home/master/Desktop/PIS/pis_5to/frontend/src/app/layout.tsx
+// File: C:\Users\Gonzalez G\Desktop\Wilson Gonzalez\5 Ciclo\Desarrollo de plataformas\pis_5to\frontend\src\app\layout.tsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
