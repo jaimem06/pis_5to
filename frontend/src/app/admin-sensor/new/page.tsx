@@ -79,7 +79,7 @@ export default function NuevaMota() {
       <div className="flex flex-wrap justify-center gap-4">
       <div className="flex flex-row justify-between w-full">
       <div className="w-1/2 p-4">
-      <MapComponente lat={latitud} lng={longitud} zoom={10} onMapClick={(lat, lng) => {
+      <MapComponente lat={latitud} lng={longitud} zoom={18} onMapClick={(lat, lng) => {
           setLatitud(lat);
           setLongitud(lng);
         }} />

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { buscar_mota, get_tipos, modify_mota } from "@/hooks/Service_mota";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-
+import MapComponente from "@/components/Map/map";
 interface FormData {
   ip_sensor: string;
   tipo: string;
@@ -23,7 +23,8 @@ export default function Editar(params) {
   const [tiposMota, setTiposMota] = useState([]);
   const [mota, setMotas] = useState(null);
   const token = Cookies.get("token");
-
+  const [lat, setLatitud] = useState(0); // Estado para latitud con valor predeterminado
+  const [long, setLongitud] = useState(0); // Estado para longitud con valor predeterminado
   useEffect(() => {
     if (!mota) {
       buscar_mota(token, params.params).then((info) => {
@@ -63,9 +64,13 @@ export default function Editar(params) {
       setValue("latitud", mota.latitud);
       setValue("longitud", mota.longitud);
       setValue("estado", mota.estado);
-      console.log(mota);
+      if(lat==0 && long==0)
+        setLatitud(mota.latitud);
+        setLongitud(mota.longitud);
+        console.log(lat, long);
+
     }
-  }, [mota, setValue]);
+  }, [mota, setValue,setLatitud,setLongitud]);
 
   const onSubmit = (data: FormData) => {
     modify_mota(data, params.params, token).then((info) => {
@@ -98,7 +103,22 @@ export default function Editar(params) {
     <DefaultLayout>
       <div className="mx-auto max-w-7xl">
         <Breadcrumb pageName="Editar Mota" />
-      </div>
+        </div>
+
+<div className="flex flex-wrap justify-center gap-4">
+<div className="flex flex-row justify-between w-full">
+<div className="w-1/2 p-4">
+<MapComponente  zoom={18} onMapClick={(lat, lng) => {
+  
+    setLatitud(lat);
+    setLongitud(lng);
+    setValue("latitud", lat);
+    setValue("longitud", lng);
+  }} />
+</div>
+
+
+<div className="w-1/2 max-w-md mx-auto">
       <form
         className="mx-auto max-w-md rounded-[10px] border border-stroke bg-white p-4 shadow-md dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5"
         onSubmit={handleSubmit(onSubmit)}
@@ -232,7 +252,11 @@ export default function Editar(params) {
             Guardar
           </button>
         </div>
+        
       </form>
+      </div>
+      </div>
+      </div>
     </DefaultLayout>
   );
 }

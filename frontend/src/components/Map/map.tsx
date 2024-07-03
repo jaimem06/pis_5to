@@ -1,41 +1,63 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 interface MapComponentProps {
-  lat: number;
-  lng: number;
   zoom: number;
   onMapClick?: (lat: number, lng: number) => void;
 }
 
-// New component for handling map events
-const MapEvents: React.FC<{ onMapClick?: (lat: number, lng: number) => void }> = ({ onMapClick }) => {
-  useMapEvents({
-    click(e) {
-      const { lat, lng } = e.latlng;
-      if (onMapClick) {
-        onMapClick(lat, lng);
+const MapComponent: React.FC<MapComponentProps> = ({ zoom, onMapClick }) => {
+  const [position, setPosition] = useState<[number, number]>([0, 0]);
+  const [hasLocation, setHasLocation] = useState(false);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setPosition([position.coords.latitude, position.coords.longitude]);
+        setHasLocation(true);
+      },
+      () => {
+        console.error('Acceso a la ubicación denegado por el usuario o no disponible.');
       }
-    },
-  });
+    );
+  }, []);
 
-  return null; // This component does not render anything itself
-};
+  const MapEvents = () => {
+    useMapEvents({
+      click: (e) => {
+        const { lat, lng } = e.latlng;
+        setPosition([lat, lng]);
+        if (onMapClick) {
+          onMapClick(lat, lng);
+        }
+      },
+    });
+    return null;
+  };
 
-const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, zoom, onMapClick }) => {
+  const UpdateMapCenter: React.FC<{ position: [number, number] }> = ({ position }) => {
+    const map = useMap();
+    map.setView(position, map.getZoom());
+    return null;
+  };
+
   return (
-    <MapContainer center={[lat, lng]} zoom={zoom} style={{ height: '100%', width: '100%' }}>
+    <MapContainer center={position} zoom={zoom} style={{ height: '100%', width: '100%' }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />  
-      <Marker position={[lat, lng]}>
-        <Popup>
-          Un marcador en la posición seleccionada.
-        </Popup>
-      </Marker>
-      {/* Render the MapEvents component inside MapContainer */}
-      <MapEvents onMapClick={onMapClick} />
+      />
+      {hasLocation && (
+        <>
+          <Marker position={position}>
+            <Popup>
+              Tu ubicación actual.
+            </Popup>
+          </Marker>
+          <UpdateMapCenter position={position} />
+          <MapEvents />
+        </>
+      )}
     </MapContainer>
   );
 };
