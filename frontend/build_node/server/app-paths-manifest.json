@@ -1,6 +1,0 @@
-{
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/admin-sensor/[external]/page": "app/admin-sensor/[external]/page.js",
-  "/admin-sensor/page": "app/admin-sensor/page.js",
-  "/admin-sensor/new/page": "app/admin-sensor/new/page.js"
-}
