@@ -2,30 +2,8 @@ from app import create_app
 from jsonschema import ValidationError
 from flask import jsonify, make_response, request
 from controllers.utils.errors import Errors, Errors_code
-import paho.mqtt.client as mqtt
 
 app = create_app()
-
-def on_connect(client, userdata, flags, rc, properties):
-    print("Connected with result code "+str(rc))
-    client.subscribe("esp32/data")
-
-def on_message(client, userdata, msg):
-    print(msg.topic + " " + str(msg.payload))
-
-# Especifica la versión del protocolo MQTT al crear el cliente.
-# Por ejemplo, para usar MQTT v5, puedes hacer lo siguiente:
-client = mqtt.Client(protocol=mqtt.MQTTv5)
-client.on_connect = on_connect
-client.on_message = on_message
-
-try:
-    client.connect("localhost", 1883, 60)
-except Exception as e:
-    print(f"Error al conectar: {e}")
-
-client.loop_start()  # Inicia un bucle de red en un hilo aparte
-
 
 @app.after_request
 def after_request_func(response):
@@ -72,20 +50,5 @@ def bad_request(error):
             400,
         )
 
-
 if __name__ == "__main__":
-    client.loop_start()
     app.run(debug=True, host="0.0.0.0")
-
-# pip install python-dotenv
-# apt-get install python3-mysqldb
-
-# ORM que se va a utilizar:
-
-# pip install flask_sqlalchemy
-# pip install PyMySQL
-# pip install cryptography
-# pip install flask-expects-json
-# pip install jsonschema
-# pip install tokenizer
-# pip install PyJWT
