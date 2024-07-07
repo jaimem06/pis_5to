@@ -1,23 +1,42 @@
 from flask import Flask
-from flask_apscheduler import APScheduler
 from flask_sqlalchemy import SQLAlchemy
-from config.mqtt_config import create_mqtt_client
+import atexit
+import json
+import threading
+from config.mqtt_config import create_mqtt_client, publish_solicitud_datos
 
 db = SQLAlchemy()
-scheduler = APScheduler()
-
-def scheduleTask():
-    create_mqtt_client()
 
 def create_app():
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object('config.config.Config')
     db.init_app(app)
 
-    scheduler.init_app(app)
-    scheduler.start()
+    def save_data(data):
+        with app.app_context():
+            from controllers.monitoreoControl import MonitoreoControl
+            monitoreoControl = MonitoreoControl()
+            try:
+                id_monitoreo = monitoreoControl.guardar_monitoreo(data)
+                print(f"Monitoreo guardado con id: {id_monitoreo}")
+            except Exception as e:
+                print(f"Error al guardar monitoreo: {e}")
 
-    scheduler.add_job(id='ScheduledTask', func=scheduleTask, trigger='interval', seconds=30)
+    def on_message(client, userdata, msg):
+        try:
+            data = json.loads(msg.payload.decode())
+            save_data(data)
+        except Exception as e:
+            print(f"Error: {e}")
+
+    client = create_mqtt_client()
+    client.on_message = on_message
+
+    def publish_and_subscribe():
+        publish_solicitud_datos()
+        client.subscribe("sensor/agua")
+
+    publish_and_subscribe()
 
     with app.app_context():
         from routes.api import api
@@ -26,15 +45,18 @@ def create_app():
         from routes.api_monitoreo import api_monitoreo
         from routes.api_login import api_login
         from routes.api_validarToken import api_validarToken
-        
+
         app.register_blueprint(api_persona)
         app.register_blueprint(api)
         app.register_blueprint(api_mota)
         app.register_blueprint(api_monitoreo)
         app.register_blueprint(api_login)
         app.register_blueprint(api_validarToken)
-
         db.create_all()
-        #db.drop_all()
-        
+
     return app
+
+def shutdown_scheduler():
+    pass
+
+atexit.register(shutdown_scheduler)

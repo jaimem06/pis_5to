@@ -1,4 +1,3 @@
-from app import db
 from models.monitoreo import Monitoreo
 from models.mota import Mota
 from datetime import datetime
@@ -6,6 +5,7 @@ import pandas as pd
 import numpy as np
 import uuid
 from statsmodels.tsa.arima.model import ARIMA
+from app import db
 class MonitoreoControl:
 
     # Método para listar monitoreos
