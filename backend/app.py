@@ -1,16 +1,21 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_apscheduler import APScheduler
 import atexit
 import json
-import threading
 from config.mqtt_config import create_mqtt_client, publish_solicitud_datos
 
 db = SQLAlchemy()
+scheduler = APScheduler()
 
 def create_app():
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object('config.config.Config')
     db.init_app(app)
+
+    if not scheduler.running:
+        scheduler.init_app(app)
+        scheduler.start()
 
     def save_data(data):
         with app.app_context():
@@ -36,7 +41,7 @@ def create_app():
         publish_solicitud_datos()
         client.subscribe("sensor/agua")
 
-    publish_and_subscribe()
+    scheduler.add_job(id='ScheduledTask', func=publish_and_subscribe, trigger='interval', minutes=1)
 
     with app.app_context():
         from routes.api import api
@@ -57,6 +62,7 @@ def create_app():
     return app
 
 def shutdown_scheduler():
-    pass
+    if scheduler.running:
+        scheduler.shutdown()
 
 atexit.register(shutdown_scheduler)
