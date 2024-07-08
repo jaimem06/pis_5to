@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { buscar_mota, get_tipos, modify_mota } from "@/hooks/Service_mota";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import MapComponente from "@/components/Map/map";
+import MapComponente1 from "@/components/Map/mapEdit";
 interface FormData {
   ip_sensor: string;
   tipo: string;
@@ -108,7 +108,7 @@ export default function Editar(params) {
 <div className="flex flex-wrap justify-center gap-4">
 <div className="flex flex-row justify-between w-full">
 <div className="w-1/2 p-4">
-<MapComponente  zoom={18} onMapClick={(lat, lng) => {
+<MapComponente1 lat={lat} lng={long} zoom={18} onMapClick={(lat, lng) => {
   
     setLatitud(lat);
     setLongitud(lng);
