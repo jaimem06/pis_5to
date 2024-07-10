@@ -16,6 +16,7 @@ def create_app():
     if not scheduler.running:
         scheduler.init_app(app)
         scheduler.start()
+        print("Scheduler iniciado y ejecutándose.")
 
     def save_data(data):
         with app.app_context():
@@ -28,20 +29,23 @@ def create_app():
                 print(f"Error al guardar monitoreo: {e}")
 
     def on_message(client, userdata, msg):
-        try:
-            data = json.loads(msg.payload.decode())
-            save_data(data)
-        except Exception as e:
-            print(f"Error: {e}")
+            try:
+                data = json.loads(msg.payload.decode())
+                save_data(data)
+            except Exception as e:
+                print(f"Error: {e}")
 
     client = create_mqtt_client()
-    client.on_message = on_message
+    if client is not None:
+        client.on_message = on_message
+    else:
+        print("No se pudo crear el cliente MQTT.")
 
     def publish_and_subscribe():
         publish_solicitud_datos()
         client.subscribe("sensor/agua")
 
-    scheduler.add_job(id='ScheduledTask', func=publish_and_subscribe, trigger='interval', minutes=1)
+    scheduler.add_job(id='ScheduledTask', func=publish_and_subscribe, trigger='interval', minutes=25)
 
     with app.app_context():
         from routes.api import api
@@ -58,7 +62,7 @@ def create_app():
         app.register_blueprint(api_login)
         app.register_blueprint(api_validarToken)
         db.create_all()
-
+        #db.drop_all()
     return app
 
 def shutdown_scheduler():
