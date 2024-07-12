@@ -9,6 +9,7 @@ class Mota(db.Model):
     tipo = db.Column(db.Enum(TipoMota),nullable=False)
     latitud = db.Column(db.Float)
     longitud = db.Column(db.Float)
+    enlace = db.Column(db.String(25))
     ip_sensor = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
@@ -25,6 +26,7 @@ class Mota(db.Model):
             'tipo': self.tipo.serialize if self.tipo else None,
             'latitud': self.latitud,
             'longitud': self.longitud,
+            'enlace': self.enlace,
             'ip_sensor': self.ip_sensor,
             'estado': self.estado
         }
@@ -38,6 +40,7 @@ class Mota(db.Model):
             tipo=self.tipo,
             latitud=self.latitud,
             longitud=self.longitud,
+            enlace=self.enlace,
             ip_sensor=self.ip_sensor,
             estado=self.estado
         )
