@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import swal from "sweetalert";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation"; // Corrección de importación para useRouter
+import { useRouter } from "next/navigation";
 import { get_tipos, save_mota } from "@/hooks/Service_mota";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";

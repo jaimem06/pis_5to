@@ -10,7 +10,7 @@ mqtt_pass = Config.HIVEMQ_PASSWORD
 
 def on_connect(client, userdata, flags, rc):
     print(f"Conectado al Broker, código de resultado: {rc}.")
-    client.subscribe("sensor/agua")
+    client.subscribe("sensor/aire")
 
 def create_mqtt_client():
     client = mqtt.Client()
