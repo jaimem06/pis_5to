@@ -11,7 +11,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ zoom }) => {
     const defaultPosition: [number, number] = [-4.0307289470706875, -79.19963225249968];
 
     return (
-        <MapContainer center={defaultPosition} zoom={zoom} style={{ height: '550px', width: '100%', borderRadius: "20px", border: "4px solid #020d1a" }}>
+        <MapContainer center={defaultPosition} zoom={zoom} style={{ height: '475px', width: '100%', borderRadius: "20px", border: "4px solid #020d1a" }}>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
