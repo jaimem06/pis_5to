@@ -16,6 +16,7 @@ interface FormData {
   tipo: string;
   latitud: number;
   longitud: number;
+  enlace:string;
   estado: boolean;
 }
 
@@ -43,6 +44,7 @@ export default function NuevaMota() {
     latitud: Yup.number().required("La latitud es requerida"),
     longitud: Yup.number().required("La longitud es requerida"),
     estado: Yup.boolean().required("El estado es requerido"),
+    enlace:Yup.string().required("el enlace es requerido")
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -79,7 +81,7 @@ export default function NuevaMota() {
       <div className="flex flex-wrap justify-center gap-4">
       <div className="flex flex-row justify-between w-full">
       <div className="w-1/2 p-4">
-      <MapComponente lat={latitud} lng={longitud} zoom={18} onMapClick={(lat, lng) => {
+      <MapComponente zoom={18} onMapClick={(lat, lng) => {
           setLatitud(lat);
           setLongitud(lng);
         }} />
@@ -108,6 +110,26 @@ export default function NuevaMota() {
             />
             {errors.ip_sensor && (
               <div className="text-danger mt-1">{errors.ip_sensor?.message}</div>
+            )}
+          </div>
+        </div>
+        <div className="mb-4">
+          <label
+            className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
+            htmlFor="enlace"
+          >
+            enlace del sensor
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              id="enlace"
+              {...register("enlace")}
+              placeholder="enlace del sensor"
+              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 px-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+            />
+            {errors.enlace && (
+              <div className="text-danger mt-1">{errors.enlace?.message}</div>
             )}
           </div>
         </div>
