@@ -222,7 +222,7 @@ const TablePersona = () => {
                     >
                       <div className="flex items-center justify-end space-x-3.5">
                         <button
-                          title={persona.cuenta.estado ? "Editar persona" : ""}
+                          title={persona.cuenta.estado ? "Editar usuario" : ""}
                           className="hover:text-primary"
                           disabled={!persona.cuenta.estado}
                           onClick={() => boton_click(persona.external)}
