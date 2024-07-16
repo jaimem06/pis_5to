@@ -8,9 +8,17 @@ from statsmodels.tsa.arima.model import ARIMA
 from app import db
 class MonitoreoControl:
 
-    # Método para listar monitoreos
+    # Método modificado para listar monitoreos de agua y aire basado en mota_id
     def listar(self):
-        return Monitoreo.query.all()
+        monitoreos = Monitoreo.query.all()
+        datos_agua = [monitoreo.dato for monitoreo in monitoreos if monitoreo.mota_id == 1]
+        datos_aire = [monitoreo.dato for monitoreo in monitoreos if monitoreo.mota_id == 2]
+
+        resultado = {
+            "agua": datos_agua if datos_agua else "No hay datos de monitoreo de agua.",
+            "aire": datos_aire if datos_aire else "No hay datos de monitoreo de aire."
+        }
+        return resultado
 
     # Método para guardar monitoreo
     def guardar_monitoreo(self, data):

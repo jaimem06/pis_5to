@@ -1,4 +1,5 @@
-import { GET } from './connection'; 
+import { GET } from './connection';
+import Cookies from 'js-cookie';
 
 export const obtenerProyeccionMonitoreo = async (token, steps = 20) => {
     try {
@@ -9,3 +10,15 @@ export const obtenerProyeccionMonitoreo = async (token, steps = 20) => {
         throw error; 
     }
 };
+
+export async function all_monitoreo() {
+  let datos = null;
+  try {
+    const token = Cookies.get('token');
+    datos = await GET('monitoreo', token);
+  } catch (error) {
+    console.log(error.response.data);
+    return { code: 500, datos: [] };
+  }
+  return datos.data;
+}

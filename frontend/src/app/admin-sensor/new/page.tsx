@@ -10,6 +10,7 @@ import { get_tipos, save_mota } from "@/hooks/Service_mota";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import MapComponente from "@/components/Map/map";
+import { Console } from "console";
 
 interface FormData {
   ip_sensor: string;
@@ -56,14 +57,19 @@ export default function NuevaMota() {
     setValue("latitud", latitud);
     setValue("longitud", longitud);
   }, [latitud, longitud, setValue]);
-
   const onSubmit = (data: FormData) => {
     save_mota(data, token).then((info) => {
       if (info && info.code == 200) {
         swal("Registro exitoso", "Mota registrada correctamente", "success");
         router.push("/admin-sensor");
       } else {
-        swal("Error", "Error desconocido", "error");
+        swal({
+          title: "Error",
+          text: info.datos.error,
+          icon: "error",
+          timer: 4000,
+          closeOnEsc: true,
+        });
       }
     });
   };

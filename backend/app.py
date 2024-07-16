@@ -45,7 +45,7 @@ def create_app():
         publish_solicitud_datos()
         client.subscribe("sensor/agua")
 
-    scheduler.add_job(id='ScheduledTask', func=publish_and_subscribe, trigger='interval', minutes=25)
+    scheduler.add_job(id='ScheduledTask', func=publish_and_subscribe, trigger='interval', minutes=1)
 
     with app.app_context():
         from routes.api import api
