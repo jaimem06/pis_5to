@@ -68,16 +68,9 @@ def guardar():
         )
     else:
         return make_response(
-            jsonify(
-                {
-                    "msg": "ERROR",
-                    "code": 400,
-                    "datos": {"error": Errors.error[str(id)]},
-                }
-            ),
+            jsonify({"msg" : "ERROR", "code" : 400, "error" : Errors.error.get(str(id))}), 
             400,
         )
-
 
 # API para buscar mota por external_id
 @api_mota.route("/mota/<external_id>", methods=["GET"])

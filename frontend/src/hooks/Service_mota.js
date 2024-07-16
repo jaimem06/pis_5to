@@ -30,19 +30,20 @@ export async function buscar_mota(token,params){
     }
     return datos.data;
 }
-export async function save_mota(data,token) {
-    let datos =null;
-    console.log(data)
-     try {
-        datos = await POST('mota/guardar',data,token);
-        console.log(data)
-     } catch (error) {   
-        console.log(error.response.data);  
-        return {"code":500}
-     }
-      return datos.data;
- }
- 
+
+export async function save_mota(data, token) {
+    let datos = null;
+    console.log(data);
+    try {
+      datos = await POST('mota/guardar', data, token);
+      console.log(datos);
+    } catch (error) {
+      console.log(error.response.data);
+      return { "code": 500, "datos": error.response.data };
+    }
+    return datos.data;
+  }
+
  export async function modify_mota(data,params, token) {
     console.log(data);
     try {

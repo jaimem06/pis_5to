@@ -20,12 +20,16 @@ schema_guardar_monitoreo = {
 }
 
 
-# API para listar monitoreoes
+# API para listar monitoreos
 @api_monitoreo.route("/monitoreo")
 def listar():
+    resultado = monitoreoC.listar()
     return make_response(
-        jsonify({"msg": "OK","code": 200,"datos": ([i.serialize for i in monitoreoC.listar()]),}),
-        200,
+        jsonify({
+            "msg": "OK",
+            "code": 200,
+            "datos": resultado,
+        }), 200,
     )
 
 # API para guardar monitoreo

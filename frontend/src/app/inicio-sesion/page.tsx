@@ -33,8 +33,8 @@ export default function Login() {
         Cookies.set('external', info.datos.external);
         console.log(info.datos.user);
         swal({
-          title: "Info",
-          text: "Bienvenido " + info.datos.user,
+          title: "Bienvenido",
+          text: info.datos.user,
           icon: "success",
           timer: 4000,
           closeOnEsc: true,
@@ -56,22 +56,17 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit(sendInfo)}>
-      <div className="container">
-        <div className="card">
-          <a className="login">Bienvenido</a>
-          <div className="inputBox">
-            <input type="text" required {...register('correo')} />
-            <span className="user">Usuario</span>
-          </div>
-
-          <div className="inputBox">
-            <input type="password" required {...register('clave')} />
-            <span>Clave</span>
-          </div>
-          <button type="submit" className="btnlogin">Iniciar Sesion</button>
+      <form onSubmit={handleSubmit(sendInfo)} className="card">
+        <div className="login">Bienvenido</div>
+        <div className="inputBox">
+          <input type="text" required {...register('correo')} />
+          <span className="user">Usuario</span>
         </div>
-      </div>
-    </form>
+        <div className="inputBox">
+          <input type="password" required {...register('clave')} />
+          <span>Clave</span>
+        </div>
+        <button type="submit" className="btnlogin">Iniciar Sesión</button>
+      </form>
   );
 }

@@ -33,7 +33,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "build_node/types/**/*.ts"
-, "src/hooks/connection.js", "src/hooks/authenticate.js", "src/app/inicio-sesion/page.tsx", "src/app/pages/_middleware.js", "src/components/Tables/TableMota.tsx"  ],
+, "src/hooks/connection.js", "src/hooks/authenticate.js", "src/app/inicio-sesion/page.tsx", "src/app/pages/_middleware.js", "src/components/Tables/TableMota.tsx", "src/components/Map/map.jsx"  ],
   "exclude": [
     "node_modules"
   ]

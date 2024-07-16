@@ -1,26 +1,31 @@
-"use client";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+'use client';
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 import swal from "sweetalert";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { get_tipos, save_mota } from "@/hooks/Service_mota";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import MapComponente from "@/components/Map/map";
+import { Console } from "console";
 
 interface FormData {
   ip_sensor: string;
   tipo: string;
-  latitud: number;  
+  latitud: number;
   longitud: number;
+  enlace:string;
   estado: boolean;
 }
 
 export default function NuevaMota() {
   const router = useRouter();
   const [tiposMota, setTiposMota] = useState([]);
+  const [latitud, setLatitud] = useState(40.416775); // Estado para latitud con valor predeterminado
+  const [longitud, setLongitud] = useState(-3.703790); // Estado para longitud con valor predeterminado
   const token = Cookies.get('token');
 
   useEffect(() => {
@@ -29,10 +34,10 @@ export default function NuevaMota() {
         setTiposMota(info.datos);
       } else {
         setTiposMota([]);
-        
       }
     });
   }, [token]);
+  
 
   const validationSchema = Yup.object().shape({
     ip_sensor: Yup.string().trim().required("La IP del sensor es requerida"),
@@ -40,29 +45,29 @@ export default function NuevaMota() {
     latitud: Yup.number().required("La latitud es requerida"),
     longitud: Yup.number().required("La longitud es requerida"),
     estado: Yup.boolean().required("El estado es requerido"),
+    enlace:Yup.string().required("el enlace es requerido")
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
-  const { register, handleSubmit, formState } = useForm<FormData>(formOptions);
+  const { register, handleSubmit, setValue, formState } = useForm<FormData>(formOptions);
   const { errors } = formState;
 
+  // Actualizar los campos de formulario con los estados de latitud y longitud
+  useEffect(() => {
+    setValue("latitud", latitud);
+    setValue("longitud", longitud);
+  }, [latitud, longitud, setValue]);
   const onSubmit = (data: FormData) => {
     save_mota(data, token).then((info) => {
       if (info && info.code == 200) {
-        swal({
-          title: "Registro exitoso",
-          text: "Mota registrada correctamente",
-          icon: "success",
-          timer: 6000,
-          closeOnEsc: true,
-        });
+        swal("Registro exitoso", "Mota registrada correctamente", "success");
         router.push("/admin-sensor");
       } else {
         swal({
           title: "Error",
-          text: "Error desconocido",
+          text: info.datos.error,
           icon: "error",
-          timer: 6000,
+          timer: 4000,
           closeOnEsc: true,
         });
       }
@@ -74,10 +79,22 @@ export default function NuevaMota() {
   };
 
   return (
-    <DefaultLayout>
-      <div className="mx-auto max-w-7xl">
+    <DefaultLayout> 
+       <div className="mx-auto max-w-7xl">
         <Breadcrumb pageName="Nueva Mota" />
       </div>
+
+      <div className="flex flex-wrap justify-center gap-4">
+      <div className="flex flex-row justify-between w-full">
+      <div className="w-1/2 p-4">
+      <MapComponente zoom={18} onMapClick={(lat, lng) => {
+          setLatitud(lat);
+          setLongitud(lng);
+        }} />
+      </div>
+    
+
+      <div className="w-1/2 max-w-md mx-auto">
       <form
         className="mx-auto max-w-md rounded-[10px] border border-stroke bg-white p-4 shadow-md dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5"
         onSubmit={handleSubmit(onSubmit)}
@@ -102,7 +119,26 @@ export default function NuevaMota() {
             )}
           </div>
         </div>
-
+        <div className="mb-4">
+          <label
+            className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
+            htmlFor="enlace"
+          >
+            enlace del sensor
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              id="enlace"
+              {...register("enlace")}
+              placeholder="enlace del sensor"
+              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 px-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+            />
+            {errors.enlace && (
+              <div className="text-danger mt-1">{errors.enlace?.message}</div>
+            )}
+          </div>
+        </div>
         <div className="mb-4">
           <label
             className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
@@ -146,27 +182,28 @@ export default function NuevaMota() {
         </div>
 
         <div className="mb-4">
-          <label
-            className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
-            htmlFor="estado"
-          >
-            Estado de la Mota
-          </label>
-          <div className="relative">
-            <select
-              id="estado"
-              {...register("estado", {
-                setValueAs: (value) => value === "true",
-              })}
-              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 px-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-            >
-              <option value="">Seleccione un estado</option>
-              <option value="true">Activo</option>
-              <option value="false">Inactivo</option>
-            </select>
-            {errors.estado && (
-              <div className="text-danger mt-1">{errors.estado?.message}</div>
-            )}
+  <label
+    className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
+    htmlFor="estado"
+  >
+    Estado de la Mota
+  </label>
+  <div className="relative">
+    <div
+      id="estado"
+      className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 px-4.5 text-dark text-opacity-50 cursor-not-allowed focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:text-opacity-50 dark:focus:border-primary"
+    >
+      Activo
+    </div>
+    <input
+            type="hidden"
+            {...register("estado")}
+            value="true"
+          />
+    {errors.estado && (
+      <div className="text-danger mt-1">{errors.estado?.message}</div>
+    )}
+
           </div>
         </div>
 
@@ -212,6 +249,9 @@ export default function NuevaMota() {
           </button>
         </div>
       </form>
+    </div>
+    </div>
+    </div>
     </DefaultLayout>
   );
 }

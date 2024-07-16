@@ -18,13 +18,24 @@ interface FormData {
 
 const FormularioPersona = () => {
   const router = useRouter();
+  const expresion_email = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+  const expresion_clave =
+    /^(?=.*[0-9])(?=.*[!@#~=+?$%^&*])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d!@#~=+?$%^&*]{8,20}$/;
 
   const validationSchema = Yup.object().shape({
     nombre: Yup.string().trim().required("El nombre es requerido"),
     apellido: Yup.string().trim().required("El apellido es requerido"),
-    correo: Yup.string().trim().email().required("El correo es requerido"),
+    correo: Yup.string()
+      .trim()
+      .email()
+      .matches(expresion_email, "Correo incorrecto")
+      .required("El correo es requerido"),
     clave: Yup.string()
       .trim()
+      .matches(
+        expresion_clave,
+        "La clave debe tener almenos 8 caracteres alfanumericos, una mayuscula, un numero y un caracter especial",
+      )
       .min(8, "La clave debe tener almenos 8 caracteres alfanumericos")
       .max(30, "La clave no debe mas de 30 caracteres alfanumericos")
       .required("La clave es requerida"),
@@ -39,7 +50,7 @@ const FormularioPersona = () => {
       if (info && info.code === 200) {
         console.log(info);
         swal({
-          title: "Info",
+          title: "Guardado Exitoso",
           text: info.data.tag,
           icon: "success",
           timer: 6000,
@@ -113,10 +124,10 @@ const FormularioPersona = () => {
               placeholder="Ingrese su nombre"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
-            {errors.nombre && (
-              <div className="text-danger mt-1">{errors.nombre?.message}</div>
-            )}
           </div>
+          {errors.nombre && (
+            <div className="text-danger mt-1">{errors.nombre?.message}</div>
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -157,10 +168,10 @@ const FormularioPersona = () => {
               placeholder="Ingrese su apellido"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
-            {errors && (
-              <div className="text-danger mt-1">{errors.apellido?.message}</div>
-            )}
           </div>
+          {errors && (
+            <div className="text-danger mt-1">{errors.apellido?.message}</div>
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -195,10 +206,10 @@ const FormularioPersona = () => {
               placeholder="Ingrese su correo electronico"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
-            {errors && (
-              <div className="text-danger mt-1">{errors.correo?.message}</div>
-            )}
           </div>
+          {errors && (
+            <div className="text-danger mt-1">{errors.correo?.message}</div>
+          )}
         </div>
 
         <div className="mb-4">
@@ -234,10 +245,10 @@ const FormularioPersona = () => {
               placeholder="Ingrese su clave"
               className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 pl-12.5 pr-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
             />
-            {errors && (
-              <div className="text-danger mt-1">{errors.clave?.message}</div>
-            )}
           </div>
+          {errors && (
+            <div className="text-danger mt-1">{errors.clave?.message}</div>
+          )}
         </div>
         <div className="flex justify-end gap-3">
           <button

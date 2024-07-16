@@ -76,6 +76,9 @@ const TableMota: React.FC = () => {
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-[#83949E] text-left dark:bg-dark-2">
+            <th className="min-w-[150px] px-4 py-4 font-medium text-dark dark:text-white">
+                ip de mota
+              </th>
               <th className="min-w-[220px] px-4 py-4 font-medium text-dark dark:text-white xl:pl-7.5">
                 Tipo de Sensor
               </th>
@@ -97,6 +100,11 @@ const TableMota: React.FC = () => {
           <tbody>
             {filteredSensors.map(sensor => (
               <tr key={sensor.id}>
+                   <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5 border-b">
+                  <h5 className="text-dark dark:text-white">
+                    {sensor.ip_sensor}
+                  </h5>
+                </td>
                 <td className="border-[#eee] px-4 py-4 dark:border-dark-3 xl:pl-7.5 border-b">
                   <h5 className="text-dark dark:text-white">
                     {sensor.tipo}

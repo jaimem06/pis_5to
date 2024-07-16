@@ -1,31 +1,24 @@
-.container {
-    justify-content: center;    /* Centra horizontalmente */
-    align-items: center;    /* Centra verticalmente */
-    height: 100vh;
-    display: flex;
-}
-
 .login {
     color: #000;
     text-transform: uppercase;
     letter-spacing: 2px;
-    display: block;
     font-weight: bold;
     font-size: x-large;
 }
 
 .card {
+    margin: 12.2% auto;
+    justify-content: center;    /* Centra horizontalmente */
+    align-items: center;    /* Centra verticalmente */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    max-height: 500px;
     min-height: 350px;
-    width: 80%;
     flex-direction: column;
     gap: 35px;
     background: white;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.363);
+    width: 350px; /* Ancho para pantallas pequeñas */
+    max-width: 450px; /* Máximo ancho para pantallas grandes */
 }
 
 .inputBox {
@@ -94,21 +87,17 @@
     font-size: 10px;
     letter-spacing: 2px;
     margin-bottom: 1em;
-    background-color: #2C3E50;
+    background-color: #1C4443;
+    color: white;
 }
 
 .btnlogin:hover {
-    background-color: #83949E;
-    color: black;
+    background-color: #29333C;
+    color: white;
 }
-
 
 /* Media query para pantallas más grandes */
 @media (min-width: 768px) {
-    .card {
-        width: 25%;
-    }
-
     .inputBox {
         width: 260px;
     }

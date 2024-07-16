@@ -9,12 +9,13 @@ import { useEffect, useState } from "react";
 import { buscar_mota, get_tipos, modify_mota } from "@/hooks/Service_mota";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-
+import MapComponente1 from "@/components/Map/mapEdit";
 interface FormData {
   ip_sensor: string;
   tipo: string;
   latitud: number;
   longitud: number;
+  enlace :string;
   estado: boolean;
 }
 
@@ -23,7 +24,8 @@ export default function Editar(params) {
   const [tiposMota, setTiposMota] = useState([]);
   const [mota, setMotas] = useState(null);
   const token = Cookies.get("token");
-
+  const [lat, setLatitud] = useState(0); // Estado para latitud con valor predeterminado
+  const [long, setLongitud] = useState(0); // Estado para longitud con valor predeterminado
   useEffect(() => {
     if (!mota) {
       buscar_mota(token, params.params).then((info) => {
@@ -50,6 +52,7 @@ export default function Editar(params) {
     latitud: Yup.number().required("La latitud es requerida"),
     longitud: Yup.number().required("La longitud es requerida"),
     estado: Yup.boolean().required("El estado es requerido"),
+    enlace : Yup.string().trim().required("El enlace es requerido"),
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -63,9 +66,14 @@ export default function Editar(params) {
       setValue("latitud", mota.latitud);
       setValue("longitud", mota.longitud);
       setValue("estado", mota.estado);
-      console.log(mota);
+      setValue("enlace",mota.enlace);
+      if(lat==0 && long==0)
+        setLatitud(mota.latitud);
+        setLongitud(mota.longitud);
+        console.log(lat, long);
+
     }
-  }, [mota, setValue]);
+  }, [mota, setValue,setLatitud,setLongitud]);
 
   const onSubmit = (data: FormData) => {
     modify_mota(data, params.params, token).then((info) => {
@@ -98,7 +106,22 @@ export default function Editar(params) {
     <DefaultLayout>
       <div className="mx-auto max-w-7xl">
         <Breadcrumb pageName="Editar Mota" />
-      </div>
+        </div>
+
+<div className="flex flex-wrap justify-center gap-4">
+<div className="flex flex-row justify-between w-full">
+<div className="w-1/2 p-4">
+<MapComponente1 lat={lat} lng={long} zoom={18} onMapClick={(lat, lng) => {
+  
+    setLatitud(lat);
+    setLongitud(lng);
+    setValue("latitud", lat);
+    setValue("longitud", lng);
+  }} />
+</div>
+
+
+<div className="w-1/2 max-w-md mx-auto">
       <form
         className="mx-auto max-w-md rounded-[10px] border border-stroke bg-white p-4 shadow-md dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5"
         onSubmit={handleSubmit(onSubmit)}
@@ -216,6 +239,26 @@ export default function Editar(params) {
             )}
           </div>
         </div>
+        <div className="mb-4">
+          <label
+            className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
+            htmlFor="enlace"
+          >
+            enlace del sensor
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              id="enlace"
+              {...register("enlace")}
+              placeholder="enlace del sensor"
+              className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 px-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+            />
+            {errors.enlace && (
+              <div className="text-danger mt-1">{errors.enlace?.message}</div>
+            )}
+          </div>
+        </div>
 
         <div className="flex justify-end gap-3">
           <button
@@ -232,7 +275,11 @@ export default function Editar(params) {
             Guardar
           </button>
         </div>
+        
       </form>
+      </div>
+      </div>
+      </div>
     </DefaultLayout>
   );
 }
