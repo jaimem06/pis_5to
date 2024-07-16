@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, make_response, request
 from controllers.personaControl import PersonaControl
 from controllers.utils.errors import Errors
 from flask_expects_json import expects_json
-
+from controllers.authenticate import token_required
 api_persona = Blueprint("api_persona", __name__)
 
 personaC = PersonaControl()
@@ -10,33 +10,87 @@ personaC = PersonaControl()
 schema_persona = {
     "type": "object",
     "properties": {
-        "nombre": {"type": "string", "pattern": "^[a-zA-Z ]+$"},
-        "apellido": {"type": "string", "pattern": "^[a-zA-Z ]+$"},
+        "nombre": {
+            "type": "string",
+            "pattern": "^[a-zA-Z ]+$",
+        },
+        "apellido": {
+            "type": "string",
+            "pattern": "^[a-zA-Z ]+$",
+        },
         "correo": {
             "type": "string",
-            "pattern": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
-            "errorMessage": "Correo invalido debe tener formato: ejemplo@gmail.com",
+            "pattern": r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
         },
         "clave": {
             "type": "string",
-            "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
-            "errorMessage": "La clave debe tener al menos 8 caracteres, una letra mayuscula, una letra minuscula, un numero y un caracter especial",
+            "pattern": r"^(?=.*[0-9])(?=.*[!@#~=+?$%^&*])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d!@#~=+?$%^&*]{8,20}$",
+            "minLength": 8, 
+            "maxLength": 20,
+
         },
     },
     "required": ["nombre", "apellido", "correo", "clave"],
-    "errorMessage": {
-        "required": {
-            "nombre": "El nombre es obligatorio.",
-            "apellido": "El apellido es obligatorio.",
-            "correo": "El correo es obligatorio.",
-            "clave": "La clave es obligatoria.",
-        }
+}
+
+schema_modificar = {
+    "type": "object",
+    "properties": {
+        "nombre": {
+            "type": "string",
+            "pattern": "^[a-zA-Z ]+$",
+        },
+        "apellido": {
+            "type": "string",
+            "pattern": "^[a-zA-Z ]+$",
+        },
+        "correo": {
+            "type": "string",
+            "pattern": r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
+        },
     },
+    "required": ["nombre", "apellido", "correo"],
 }
 
 
+# declaracion de esquema para validacion de credenciales
+schema_credenciales = {
+    "type": "object",
+    "properties": {
+        "correo": {
+            "type": "string",
+            "pattern": r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
+        },
+        "nuevo_correo": {
+            "type": "string",
+            "pattern": r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
+        },
+        "clave": {
+            "type": "string",
+            "pattern": r"^(?=.*[0-9])(?=.*[!@#~=+?$%^&*])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d!@#~=+?$%^&*]{8,20}$",
+            "minLength": 8,
+            "maxLength": 20,
+        },
+        "nueva_clave": {
+            "type": "string",
+            "pattern": r"^(?=.*[0-9])(?=.*[!@#~=+?$%^&*])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d!@#~=+?$%^&*]{8,20}$",
+            "minLength": 8,
+            "maxLength": 20,
+        },
+        "confirmar_clave": {
+            "type": "string",
+            "pattern": r"^(?=.*[0-9])(?=.*[!@#~=+?$%^&*])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d!@#~=+?$%^&*]{8,20}$",
+            "minLength": 8,
+            "maxLength": 20,
+        },
+    },
+    
+    "required": ["correo", "clave", "nueva_clave", "nuevo_correo", "confirmar_clave"]
+}
+
 # api para persona
 @api_persona.route("/persona")
+@token_required
 def listar():
     return make_response(
         jsonify(
@@ -52,6 +106,7 @@ def listar():
 
 # api para guardar persona
 @api_persona.route("/persona/guardar", methods=["POST"])
+@token_required
 @expects_json(schema_persona)
 # guardar persona
 def guardar_persona():
@@ -70,7 +125,7 @@ def guardar_persona():
                 {
                     "msg": "ERROR",
                     "code": 400,
-                    "data": {"tag": "No se pudo guardar persona"},
+                    "datos": {"error": "No se puede guardar persona, "+str(Errors.error[str(id)])},
                 }
             ),
             400,
@@ -79,6 +134,7 @@ def guardar_persona():
 
 # API para mostrar persona por external_id
 @api_persona.route("/persona/<external_id>", methods=["GET"])
+@token_required
 def listar_external_id(external_id):
     persona = personaC.obtener_persona_external_id(external_id)
 
@@ -101,16 +157,17 @@ def listar_external_id(external_id):
 
 # api para modificar PERSONA
 @api_persona.route("/persona/modificar/<external>", methods=["POST"])
-@expects_json(schema_persona)
+@token_required
+@expects_json(schema_modificar)
 # modificar persona
 def modificar(external):
 
     data = request.json
-    persona = personaC.modificar_persona(data, external)
+    persona,ext = personaC.modificar_persona(data, external)
 
-    if persona:
+    if persona >=0:
         return make_response(
-            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Datos modificados"}}),
+            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Datos modificados"},"external":ext}),
             200,
         )
     else:
@@ -125,13 +182,38 @@ def modificar(external):
             400,
         )
 
+# api para modificar credenciales
+@api_persona.route("/persona/modificar-credenciales/<external>", methods=["POST"])
+@token_required
+@expects_json(schema_credenciales)
+def modificar_credenciales(external):
+    data = request.json
+    persona = personaC.modificar_credenciales(data, external)
+
+    if persona >=0:
+        return make_response(
+            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Credenciales modificadas"}}),
+            200,
+        )
+    else:
+        return make_response(
+            jsonify(
+                {
+                    "msg": "ERROR",
+                    "code": 400,
+                    "datos": {"error": Errors.error[str(persona)]},
+                }
+            ),
+            400,
+        )
 
 # api para actualizar estado de cuenta persona
-@api_persona.route("/persona/actualizar-estado/<external>", methods=["POST"])
+@api_persona.route("/persona/actualizar-estado/<external>", methods=["GET"])
+@token_required
 def actualizar_estado(external):
     persona, estado = personaC.actualizar_estado(external)
 
-    if persona:
+    if persona >=0:
         return make_response(
             jsonify(
                 {"msg": "OK", "code": 200, "data": {"tag": "Cuenta " + str(estado)}}

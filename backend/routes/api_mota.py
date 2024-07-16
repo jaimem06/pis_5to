@@ -30,6 +30,12 @@ def listar():
         jsonify({"msg": "OK","code": 200,"datos": ([i.serialize for i in motaC.listar()]),}),
         200,
     )
+@api_mota.route("/listarTipos", methods=['GET'])
+def listar_tipos():
+    return make_response(
+        jsonify({"msg": "OK", "code": 200, "datos": motaC.listar_tipos()}),
+        200
+    )
 
 @api_mota.route("/mota/activos")
 def listarEstado(estado=True):
@@ -62,16 +68,9 @@ def guardar():
         )
     else:
         return make_response(
-            jsonify(
-                {
-                    "msg": "ERROR",
-                    "code": 400,
-                    "datos": {"error": Errors.error[str(id)]},
-                }
-            ),
+            jsonify({"msg" : "ERROR", "code" : 400, "error" : Errors.error.get(str(id))}), 
             400,
         )
-
 
 # API para buscar mota por external_id
 @api_mota.route("/mota/<external_id>", methods=["GET"])
@@ -98,15 +97,14 @@ def listar_external_id(external_id):
 # api para modificar mota
 @api_mota.route("/mota/modificar/<external>", methods=["POST"])
 @expects_json(schema_mota)
-# modificar mota
 def modificar(external):
 
     data = request.json
     mota = motaC.modificar(data, external)
 
-    if mota:
+    if mota >= 0:
         return make_response(
-            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Datos modificados"}}),
+            jsonify({"msg": "OK", "code": 200, "data": {"tag": "Mota guardada"}}),
             200,
         )
     else:

@@ -3,3 +3,5 @@ backend/virtual/
 backend/virtual/pyvenv.cfg
 *.pyc
 __pycache__/
+frontend/build_node/*
+backend/virtual/pyvenv.cfg

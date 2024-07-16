@@ -18,7 +18,7 @@ schema_sesion = {
 }
 
 # API para iniciar sesion
-@api_login.route("/sesion", methods=['POST'])
+@api_login.route("/login", methods=['POST'])
 @expects_json(schema_sesion)
 def session():
     data = request.json
