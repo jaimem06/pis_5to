@@ -57,6 +57,9 @@ class MonitoreoControl:
 
     # Método para preparar datos para proyección
     def preparar_datos_para_proyeccion(self, monitoreos):
+        if not monitoreos:
+            return pd.DataFrame()  # Retorna un DataFrame vacío si no hay datos
+
         timestamps = [monitoreo.fecha for monitoreo in monitoreos]
         datos = [monitoreo.dato for monitoreo in monitoreos]
 
@@ -67,8 +70,16 @@ class MonitoreoControl:
         return df
 
     # Método para calcular proyección usando ARIMA
-    def arima(self, df, steps=3):
-        model = ARIMA(df['Dato'], order=(1, 1, 1))
-        model_fit = model.fit()
-        forecast = model_fit.forecast(steps=steps)
-        return forecast
+    def arima(self, df, steps):
+        if df.empty:
+            print("El DataFrame está vacío.")
+            return None
+
+        try:
+            model = ARIMA(df['Dato'], order=(1, 1, 1))
+            model_fit = model.fit()
+            forecast = model_fit.forecast(steps=steps)
+            return forecast
+        except Exception as e:
+            print("Error al calcular la proyección ARIMA:", e)
+            return None

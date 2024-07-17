@@ -79,49 +79,26 @@ def listar_external_id(external_id):
 
 
 # API para obtener la proyección ARIMA
-@api_monitoreo.route("/monitoreo/proyeccion", methods=["GET"])
-def obtener_proyeccion():
-    # Obtener el parámetro de steps de la consulta
-    steps = request.args.get('steps', default=3, type=int)  # Por defecto 20 pasos si no se especifica
+@api_monitoreo.route("/monitoreo/proyeccion/<dias>", methods=["GET"])
+def obtener_proyeccion(dias):
+    print(dias)
+    steps = request.args.get('steps', int(dias), type=int)
     
-    # Obtener datos históricos de agua
     monitoreos_agua = monitoreoC.obtener_datos_historicos_agua()
-    
-    # Obtener datos históricos de aire
     monitoreos_aire = monitoreoC.obtener_datos_historicos_aire()
-    
-    # Verificar si se encontraron datos de agua
-    if monitoreos_agua:
-        # Preparar datos para proyección
-        df_agua = monitoreoC.preparar_datos_para_proyeccion(monitoreos_agua)
-        # Calcular proyección usando el método ARIMA 
-        proyeccion_agua = monitoreoC.arima(df_agua, steps)
-    else:
-        proyeccion_agua = None
-    
-    # Verificar si se encontraron datos de aire
-    if monitoreos_aire:
-        # Preparar datos para proyección
-        df_aire = monitoreoC.preparar_datos_para_proyeccion(monitoreos_aire)
-        # Calcular proyección usando el método ARIMA 
-        proyeccion_aire = monitoreoC.arima(df_aire, steps)
-    else:
-        proyeccion_aire = None
-    
+
+    df_agua = monitoreoC.preparar_datos_para_proyeccion(monitoreos_agua) if monitoreos_agua else None
+    df_aire = monitoreoC.preparar_datos_para_proyeccion(monitoreos_aire) if monitoreos_aire else None
+
+    proyeccion_agua = monitoreoC.arima(df_agua, steps) if df_agua is not None else None
+    proyeccion_aire = monitoreoC.arima(df_aire, steps) if df_aire is not None else None
+
     response_data = {
         "msg": "OK",
         "code": 200,
-        "proyecciones": {}
+        "proyecciones": {
+            "agua": [round(val, 6) for val in proyeccion_agua] if proyeccion_agua is not None else "No hay datos de monitoreo de agua.",
+            "aire": [round(val, 6) for val in proyeccion_aire] if proyeccion_aire is not None else "No hay datos de monitoreo de aire."
+        }
     }
-    
-    if proyeccion_agua is not None:
-        response_data["proyecciones"]["agua"] = [round(val, 6) for val in proyeccion_agua]
-    else:
-        response_data["proyecciones"]["agua"] = "No hay datos de monitoreo de agua."
-    
-    if proyeccion_aire is not None:
-        response_data["proyecciones"]["aire"] = [round(val, 6) for val in proyeccion_aire]
-    else:
-        response_data["proyecciones"]["aire"] = "No hay datos de monitoreo de aire."
-
     return make_response(jsonify(response_data), 200)

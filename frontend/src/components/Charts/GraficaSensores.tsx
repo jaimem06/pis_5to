@@ -6,10 +6,7 @@ import Cookies from "js-cookie";
 
 const GraficaSensores: React.FC = () => {
   const [proyeccion, setProyeccion] = useState<any>(null);
-  const [chartHeight, setChartHeight] = useState<number>(310);
-  const [scrollPosition, setScrollPosition] = useState<number>(0);
   const [projectionSteps, setProjectionSteps] = useState<number>(3); 
-
   const token = Cookies.get("token");
 
   useEffect(() => {
@@ -22,9 +19,11 @@ const GraficaSensores: React.FC = () => {
         console.error("Error al obtener la proyección:", error);
       }
     };
-
-    fetchProyeccion();
-  }, [projectionSteps]); // Proyeciones de los dias
+    
+    if (projectionSteps >= 2) {
+      fetchProyeccion();
+    }
+  }, [projectionSteps]);
 
   const transformDataToTimeUnit = (data: any) => {
     const transformedData: any = {
@@ -40,8 +39,14 @@ const GraficaSensores: React.FC = () => {
     return transformedData;
   };
 
+
   const handleProjectionStepsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setProjectionSteps(Number(event.target.value));
+    const newValue = Number(event.target.value);
+    if (newValue >= 2) {
+      setProjectionSteps(newValue);
+    } else {
+      console.error('Solo valores iguales o mayores a 2 son permitidos.');
+    }
   };
 
   const categories = Array.from({ length: projectionSteps }, (_, i) => (i + 1).toString());
@@ -69,7 +74,6 @@ const GraficaSensores: React.FC = () => {
     colors: ["#5750F1", "#0ABEF9"],
     chart: {
       fontFamily: "Satoshi, sans-serif",
-      height: chartHeight,
       type: "area",
       toolbar: {
         show: true,
@@ -153,6 +157,12 @@ const GraficaSensores: React.FC = () => {
       axisTicks: {
         show: false,
       },
+      labels: {
+        rotate: -45, // Rotar etiquetas para mejorar la legibilidad
+        formatter: function (value: string, timestamp: number, opts: any) {
+          return (timestamp % 10 === 0) ? value : ""; // Mostrar solo cada décima etiqueta
+        }
+      },
     },
     yaxis: {
       title: {
@@ -187,7 +197,6 @@ const GraficaSensores: React.FC = () => {
       <div className="relative overflow-x-auto">
         <div
           className="-ml-4 -mr-5"
-          style={{ transform: `translateX(${scrollPosition}px)` }}
         >
           {proyeccion ? (
             <ReactApexChart
@@ -200,7 +209,6 @@ const GraficaSensores: React.FC = () => {
               }}
               series={series}
               type="area"
-              height={chartHeight}
             />
           ) : (
             <p>Cargando proyección...</p>

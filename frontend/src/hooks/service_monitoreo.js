@@ -1,9 +1,9 @@
 import { GET } from './connection';
 import Cookies from 'js-cookie';
 
-export const obtenerProyeccionMonitoreo = async (token, steps = 20) => {
+export const obtenerProyeccionMonitoreo = async (token, steps) => {
     try {
-        const response = await GET(`monitoreo/proyeccion?steps=${steps}`);
+        const response = await GET(`monitoreo/proyeccion/${steps}`);
         return response.data; 
     } catch (error) {
         console.log('Error al obtener proyección:', error);

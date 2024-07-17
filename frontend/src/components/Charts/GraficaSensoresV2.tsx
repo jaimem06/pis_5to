@@ -1,43 +1,42 @@
 import { ApexOptions } from "apexcharts";
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import { obtenerProyeccionMonitoreo } from "@/hooks/service_monitoreo";
+import { all_monitoreo } from "@/hooks/service_monitoreo";
 import Cookies from "js-cookie";
 
 const GraficaSensoresV2: React.FC = () => {
   const [aguaCount, setAguaCount] = useState<number>(0);
   const [aireCount, setAireCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
-  const token = Cookies.get("token");
 
   useEffect(() => {
-    const fetchProyeccion = async () => {
+    const fetchMonitoreo = async () => {
       try {
-        const data = await obtenerProyeccionMonitoreo(token);
+        const data = await all_monitoreo();
         
-        if (data && data.proyecciones) {
-          const aguaCount = data.proyecciones.agua ? data.proyecciones.agua.length : 0;
-          const aireCount = data.proyecciones.aire ? data.proyecciones.aire.length : 0;
+        if (data && data.datos) {
+          const aguaCount = data.datos.agua ? data.datos.agua.length : 0;
+          const aireCount = data.datos.aire ? data.datos.aire.length : 0;
           setAguaCount(aguaCount);
           setAireCount(aireCount);
         }
         
         setLoading(false);
       } catch (error) {
-        console.error("Error al obtener la proyección:", error);
+        console.error("Error al obtener los datos de monitoreo:", error);
         setLoading(false);
       }
     };
 
-    fetchProyeccion();
-  }, [token]);
+    fetchMonitoreo();
+  }, []);
 
   const options: ApexOptions = {
     chart: {
       fontFamily: "Satoshi, sans-serif",
       type: "donut",
     },
-    colors: ["#5750F1", "#0ABEF9"],
+    colors: ["#5750F1", "#0ABEF9"], // Cambiar colores: Agua (azul), Aire (celeste)
     labels: ["Agua", "Aire"],
     legend: {
       show: false,
@@ -113,7 +112,7 @@ const GraficaSensoresV2: React.FC = () => {
         <div className="-mx-7.5 flex flex-wrap items-center justify-center gap-y-2.5">
           <div className="w-full px-7.5 sm:w-1/2">
             <div className="flex w-full items-center">
-              <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-blue"></span>
+              <span className="mr-2 block h-3 w-full max-w-3 rounded-full" style={{ backgroundColor: "#5750F1" }}></span> {/* Color para Agua */}
               <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
                 <span> Agua </span>
                 <span> {aguaCount} registros </span>
@@ -122,7 +121,7 @@ const GraficaSensoresV2: React.FC = () => {
           </div>
           <div className="w-full px-7.5 sm:w-1/2">
             <div className="flex w-full items-center">
-              <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-blue-light"></span>
+              <span className="mr-2 block h-3 w-full max-w-3 rounded-full" style={{ backgroundColor: "#0ABEF9" }}></span> {/* Color para Aire */}
               <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
                 <span> Aire </span>
                 <span> {aireCount} registros </span>
