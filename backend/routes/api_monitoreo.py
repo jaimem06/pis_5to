@@ -25,11 +25,7 @@ schema_guardar_monitoreo = {
 def listar():
     resultado = monitoreoC.listar()
     return make_response(
-        jsonify({
-            "msg": "OK",
-            "code": 200,
-            "datos": resultado,
-        }), 200,
+        jsonify({"msg": "OK","code": 200, "datos": resultado}), 200,
     )
 
 # API para guardar monitoreo
