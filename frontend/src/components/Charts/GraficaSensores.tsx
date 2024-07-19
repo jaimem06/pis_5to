@@ -159,7 +159,7 @@ const GraficaSensores: React.FC = () => {
         <h4 className="text-body-2xlg font-bold text-dark dark:text-white">Proyección de los datos:</h4>
         <div className="flex items-center gap-4">
           <div>
-            <h1>Número de días:</h1>
+            <h1>Días:</h1>
             <input
               style={{ width: "80px", borderRadius: "5px", color: "black", textAlign: "center" }}
               type="number"
