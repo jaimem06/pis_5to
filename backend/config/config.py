@@ -32,3 +32,5 @@ class Config:
     HIVEMQ_USER = environ.get('HIVEMQ_USER')
     HIVEMQ_PASSWORD = environ.get('HIVEMQ_PASSWORD')
     HIVEMQ_SSL_CA = environ.get('HIVEMQ_SSL_CA')
+    # Contraseña para solicitar datos al servidor MQTT
+    SOLICITAR_DATOS_MSG = environ.get('PASS_DATOSMQTT')

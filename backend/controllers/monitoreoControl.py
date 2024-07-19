@@ -90,3 +90,8 @@ class MonitoreoControl:
         except Exception as e:
             print("Error al calcular la proyección ARIMA:", e)
             return None
+        
+    # Método para obtener los enlaces
+    def obtener_enlaces(self):
+        motas_activas = Mota.query.filter_by(estado=True).all()
+        return [mota.enlace for mota in motas_activas if mota.enlace]

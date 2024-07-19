@@ -1,54 +1,49 @@
 import paho.mqtt.client as mqtt
 import ssl
 from config.config import Config
+import time
 
-# Credenciales y configuración del servidor HiveMQ Cloud
-mqtt_server = Config.HIVEMQ_SERVER
-mqtt_port = Config.HIVEMQ_PORT
-mqtt_user = Config.HIVEMQ_USER
-mqtt_pass = Config.HIVEMQ_PASSWORD
-
-def on_connect(client, userdata, flags, rc):
-    print(f"Conectado al Broker, código de resultado: {rc}.")
-    client.subscribe("sensor/#")
+def on_connect(client, _, __, rc):
+    if rc == 0:
+        print("Conectado al Broker.")
+        client.connected_flag = True
+    else:
+        print(f"Conexión fallida, código de resultado: {rc}")
+        client.connected_flag = False
 
 def create_mqtt_client():
     client = mqtt.Client()
-
-    # Credenciales de autenticación
-    client.username_pw_set(mqtt_user, mqtt_pass)
-
-    # CERTIFICADO TLS/SSL
+    client.username_pw_set(Config.HIVEMQ_USER, Config.HIVEMQ_PASSWORD)
+    
     try:
-        port_int = int(mqtt_port)
         client.tls_set(ca_certs=Config.HIVEMQ_SSL_CA, cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLS)
         client.on_connect = on_connect
-        client.connect(mqtt_server, port_int, 60)
+        client.connected_flag = False
+        client.connect(Config.HIVEMQ_SERVER, int(Config.HIVEMQ_PORT), 60)
         client.loop_start()
-    except ValueError:
-        print("El puerto MQTT debe ser un número entero.")
-        return None
     except Exception as e:
         print(f"Error al configurar TLS o conectar: {e}")
         return None
 
+    retry_count = 0
+    while not client.connected_flag and retry_count < 5:
+        print("Esperando conexión...")
+        time.sleep(2)
+        retry_count += 1
+
+    if not client.connected_flag:
+        print("No se pudo conectar al Broker MQTT.")
+        client.loop_stop()
+        return None
+
     return client
 
-def publish_solicitud_datos():
-    client = create_mqtt_client()
-    if not client:
-        return
-    try:
-        result, mid = client.publish("solicitud/datos", "solicitar_datos")
+def publish_solicitud_datos(client):
+    if client and client.connected_flag:
+        result, _ = client.publish("solicitud/datos", Config.SOLICITAR_DATOS_MSG)
         if result == mqtt.MQTT_ERR_SUCCESS:
-            print("Mensaje 'solicitar_datos' publicado exitosamente.")
+            print("DATOS SOLICITADOS EXITOSAMENTE.")
         else:
             print(f"Error al publicar mensaje: {result}")
-        client.loop_stop()
-        client.disconnect()
-    except ValueError:
-        print("El puerto MQTT debe ser un número entero.")
-    except Exception as e:
-        print(f"Error al publicar solicitud de datos: {e}")
-
-publish_solicitud_datos()
+    else:
+        print("Cliente MQTT no está conectado.")

@@ -1,12 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_apscheduler import APScheduler
-import atexit
-import json
+import json, atexit, time
 from config.mqtt_config import create_mqtt_client, publish_solicitud_datos
 
 db = SQLAlchemy()
 scheduler = APScheduler()
+sensor_data = {}
+data_published = False
 
 def create_app():
     app = Flask(__name__, instance_relative_config=False)
@@ -18,34 +19,7 @@ def create_app():
         scheduler.start()
         print("Scheduler iniciado y ejecutándose.")
 
-    def save_data(data):
-        with app.app_context():
-            from controllers.monitoreoControl import MonitoreoControl
-            monitoreoControl = MonitoreoControl()
-            try:
-                id_monitoreo = monitoreoControl.guardar_monitoreo(data)
-                print(f"Monitoreo guardado con id: {id_monitoreo}")
-            except Exception as e:
-                print(f"Error al guardar monitoreo: {e}")
-
-    def on_message(client, userdata, msg):
-            try:
-                data = json.loads(msg.payload.decode())
-                save_data(data)
-            except Exception as e:
-                print(f"Error: {e}")
-
-    client = create_mqtt_client()
-    if client is not None:
-        client.on_message = on_message
-    else:
-        print("No se pudo crear el cliente MQTT.")
-
-    def publish_and_subscribe():
-        publish_solicitud_datos()
-        client.subscribe("sensor/agua")
-
-    scheduler.add_job(id='ScheduledTask', func=publish_and_subscribe, trigger='interval', minutes=1)
+    scheduler.add_job(id='ScheduledTask', func=lambda: publish_and_subscribe(app), trigger='interval', minutes=25)
 
     with app.app_context():
         from routes.api import api
@@ -62,8 +36,74 @@ def create_app():
         app.register_blueprint(api_login)
         app.register_blueprint(api_validarToken)
         db.create_all()
-        #db.drop_all()
+
     return app
+
+def save_data(app):
+    global data_published
+    with app.app_context():
+        from controllers.monitoreoControl import MonitoreoControl
+        monitoreoControl = MonitoreoControl()
+        for _, data in sensor_data.items():
+            try:
+                id_monitoreo = monitoreoControl.guardar_monitoreo(data)
+                print(f"Monitoreo guardado con id: {id_monitoreo}")
+            except Exception as e:
+                print(f"Error al guardar monitoreo: {e}")
+        sensor_data.clear()
+        data_published = True 
+
+def on_message(_, __, msg, app):
+    if not data_published:
+        try:
+            data = json.loads(msg.payload.decode())
+            sensor_enlace = msg.topic
+            with app.app_context():
+                from controllers.monitoreoControl import MonitoreoControl
+                monitoreoControl = MonitoreoControl()
+                if sensor_enlace in monitoreoControl.obtener_enlaces():
+                    sensor_data[sensor_enlace] = data
+                    print(f"Datos recibidos de {sensor_enlace}: {data}")
+                else:
+                    print(f"Datos ignorados de sensor inactivo: {sensor_enlace}")
+        except Exception as e:
+            print(f"Error: {e}")
+
+def publish_and_subscribe(app):
+    global data_published
+    if data_published: 
+        return
+
+    client = create_mqtt_client()
+    if client is None:
+        print("Error al crear el cliente MQTT.")
+        return
+
+    client.on_message = lambda client, userdata, msg: on_message(client, userdata, msg, app)
+    
+    retry_count = 0
+    while not client.connected_flag and retry_count < 5:
+        print("Esperando conexión...")
+        time.sleep(2)
+        retry_count += 1
+
+    if not client.connected_flag:
+        print("No se pudo conectar al Broker MQTT.")
+        client.loop_stop()
+        return
+
+    client.loop_start()
+    publish_solicitud_datos(client)
+    with app.app_context():
+        from controllers.monitoreoControl import MonitoreoControl
+        monitoreoControl = MonitoreoControl()
+        topicos = monitoreoControl.obtener_enlaces()
+    for topico in topicos:
+        client.subscribe(topico)
+        print(f"Suscrito a {topico}")
+
+    save_data(app)
+    client.loop_stop()
 
 def shutdown_scheduler():
     if scheduler.running:

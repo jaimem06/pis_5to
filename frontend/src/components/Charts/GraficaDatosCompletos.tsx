@@ -57,7 +57,7 @@ const GraficaDatosCompletos: React.FC = () => {
     colors: ["#5750F1", "#0ABEF9"],
     fill: {
       type: "solid",
-      opacity: 0.5,
+      opacity: 0.4,
     },
     chart: {
       fontFamily: "Satoshi, sans-serif",
@@ -69,9 +69,6 @@ const GraficaDatosCompletos: React.FC = () => {
     },
     stroke: {
       curve: "smooth",
-    },
-    markers: {
-      size: 5,
     },
     dataLabels: {
       enabled: false
