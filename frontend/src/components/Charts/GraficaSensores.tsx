@@ -43,7 +43,16 @@ const GraficaSensores: React.FC = () => {
   };
 
   const handleProjectionStepsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProjectionSteps(Math.max(2, Number(e.target.value)));
+    const newSteps = Math.min(Math.max(2, Number(e.target.value)), 730); // Limit to max 730 days
+    setProjectionSteps(newSteps);
+  };
+
+  const handleProjectionStepsBlur = () => {
+    if (projectionSteps < 2) {
+      setProjectionSteps(2);
+    } else if (projectionSteps > 730) {
+      setProjectionSteps(730);
+    }
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,13 +63,20 @@ const GraficaSensores: React.FC = () => {
       const currentDate = new Date();
       const selectedDate = new Date(date);
       const differenceInDays = Math.ceil((selectedDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
-      if (differenceInDays >= 2) {
+      if (differenceInDays >= 2 && differenceInDays <= 730) {
         setProjectionSteps(differenceInDays);
       } else {
-        console.error('La fecha seleccionada debe ser al menos 2 días en el futuro.');
+        console.error('La fecha seleccionada debe ser al menos 2 días en el futuro y no más de 2 años.');
+        setSelectedDate(''); // Reset the selected date if it's invalid
       }
     }
   };
+
+  // Calcula la fecha máxima para el input de fecha
+  const currentDate = new Date();
+  const maxDate = new Date(currentDate);
+  maxDate.setFullYear(currentDate.getFullYear() + 2);
+  const maxDateString = maxDate.toISOString().split('T')[0];
 
   const series = proyeccion ? [
     {
@@ -122,23 +138,23 @@ const GraficaSensores: React.FC = () => {
           if (seriesName === 'Aire') {
             if (val <= 700) {
               estado = 'Calidad: Excelente';
-            } else if (val >700 && val <= 1100) {
+            } else if (val > 700 && val <= 1100) {
               estado = 'Calidad: Buena';
-            } else if (val >1100 && val <= 1600) {
+            } else if (val > 1100 && val <= 1600) {
               estado = 'Calidad: Mala';
-            } else if(val >1600){
+            } else if (val > 1600) {
               estado = 'Calidad: Muy Mala';
             }
           } else if (seriesName === 'Agua') {
             if (val <= 300) {
               estado = 'Calidad: Excelente';
-            } else if (val >300 && val <= 600) {
+            } else if (val > 300 && val <= 600) {
               estado = 'Calidad: Buena';
-            } else if (val > 600 && val<=900) {
+            } else if (val > 600 && val <= 900) {
               estado = 'Calidad: Regular';
-            } else if (val >900 && val <=1200) {
+            } else if (val > 900 && val <= 1200) {
               estado = 'Calidad: Mala';
-            } else if (val >1200) {
+            } else if (val > 1200) {
               estado = 'Calidad: Muy Mala';
             }
           }
@@ -165,6 +181,7 @@ const GraficaSensores: React.FC = () => {
               type="number"
               value={projectionSteps}
               onChange={handleProjectionStepsChange}
+              onBlur={handleProjectionStepsBlur}
               className="form-input"
             />
           </div>
@@ -176,6 +193,8 @@ const GraficaSensores: React.FC = () => {
               value={selectedDate}
               onChange={handleDateChange}
               className="form-input"
+              min={currentDate.toISOString().split('T')[0]} // Fecha mínima es la fecha actual
+              max={maxDateString} // Fecha máxima es 2 años en el futuro
             />
           </div>
         </div>
