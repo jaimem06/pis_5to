@@ -42,7 +42,7 @@ def create_mqtt_client():
 
 def publish_solicitud_datos(client):
     if client and client.connected_flag:
-        result, _ = client.publish("solicitud/datos", Config.SOLICITAR_DATOS_MSG)
+        result, _ = client.publish(Config.TOPICO_SOLICITAR_DATOS, Config.SOLICITAR_DATOS_MSG)
         if result == mqtt.MQTT_ERR_SUCCESS:
             print("DATOS SOLICITADOS EXITOSAMENTE.")
         else:
