@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import aguaMarker from '/public/images/map_icons/agua_marker.png';
+import L from 'leaflet';
+
 
 interface MapComponentProps {
   zoom: number;
@@ -22,6 +25,14 @@ const MapComponent: React.FC<MapComponentProps> = ({ zoom, onMapClick }) => {
       }
     );
   }, []);
+
+  const aguaIcon = new L.Icon({
+    iconUrl: aguaMarker.src,
+    iconSize: [30, 30],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
 
   const MapEvents = () => {
     useMapEvents({
@@ -49,7 +60,10 @@ const MapComponent: React.FC<MapComponentProps> = ({ zoom, onMapClick }) => {
       />
       {hasLocation && (
         <>
-          <Marker position={position}>
+          <Marker 
+          position={position}  
+          icon={aguaIcon}
+          >
             <Popup>
               Tu ubicación actual.
             </Popup>

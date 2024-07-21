@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import aguaMarker from '/public/images/map_icons/agua_marker.png';
+import L from 'leaflet';
 
 interface MapComponentProps {
   lat: number;
@@ -8,6 +10,14 @@ interface MapComponentProps {
   zoom: number;
   onMapClick?: (lat: number, lng: number) => void;
 }
+
+const aireIcon = new L.Icon({
+  iconUrl: aguaMarker.src,
+  iconSize: [30, 30],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
 
 const MapEvents: React.FC<{ onMapClick?: (lat: number, lng: number) => void }> = ({ onMapClick }) => {
   useMapEvents({
@@ -37,7 +47,10 @@ const MapComponent: React.FC<MapComponentProps> = ({ lat, lng, zoom, onMapClick 
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />  
-      <Marker position={[lat, lng]}>
+      <Marker position={[lat, lng]}
+      icon={aireIcon}
+      
+      >
         <Popup>
           Un marcador en la posición seleccionada.
         </Popup>
