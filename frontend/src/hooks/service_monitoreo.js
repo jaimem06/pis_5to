@@ -16,6 +16,7 @@ export async function all_monitoreo() {
   try {
     const token = Cookies.get('token');
     datos = await GET('monitoreo', token);
+    console.log(datos);
   } catch (error) {
     console.log(error.response.data);
     return { code: 500, datos: [] };
@@ -40,6 +41,32 @@ export async function motas_activas() {
   try {
     const token = Cookies.get('token');
     datos = await GET('mota/activos', token);
+  } catch (error) {
+    console.log(error.response.data);
+    return { code: 500, datos: [] };
+  }
+  return datos.data;
+}
+
+export async function desactivar(data) {
+  let datos = null;
+  console.log(data.external_id);
+  try {
+    const token = Cookies.get('token');
+    datos = await GET('monitoreo/desactivar/'+data.external_id, token);
+  } catch (error) {
+    console.log(error.response.data);
+    return { code: 500, datos: [] };
+  }
+  return datos.data;
+}
+
+export async function activar(data) {
+  let datos = null;
+  console.log(data.external_id);
+  try {
+    const token = Cookies.get('token');
+    datos = await GET('monitoreo/activar/'+data.external_id, token);
   } catch (error) {
     console.log(error.response.data);
     return { code: 500, datos: [] };

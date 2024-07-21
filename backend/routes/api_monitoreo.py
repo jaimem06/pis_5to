@@ -123,3 +123,14 @@ def obtener_proyeccion(dias):
         }
     }
     return make_response(jsonify(response_data), 200)
+
+@api_monitoreo.route('/monitoreo/desactivar/<external>', methods=['GET'])
+def desactivar_monitoreo(external):
+    monitoreoC.desactivar_monitoreo(external)
+    return make_response(jsonify({"msg": "OK", "code": 200, "data": {"tag": "Monitoreo desactivado"}}), 200)
+
+
+@api_monitoreo.route('/monitoreo/activar/<external>', methods=['GET'])
+def activar_monitoreo(external):
+    monitoreoC.activar_monitoreo(external)
+    return make_response(jsonify({"msg": "OK", "code": 200, "data": {"tag": "Monitoreo activado"}}), 200)

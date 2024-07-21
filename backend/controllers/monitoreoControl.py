@@ -20,7 +20,9 @@ class MonitoreoControl:
             dato_con_fecha_hora = {
                 "dato": monitoreo.dato,
                 "fecha": monitoreo.fecha.strftime('%Y-%m-%d'),
-                "hora": monitoreo.hora.strftime('%H:%M:%S')
+                "hora": monitoreo.hora.strftime('%H:%M:%S'),
+                "external_id": monitoreo.external_id,
+                "estado": monitoreo.estado
             }
             if tipo == tipo.AGUA:
                 resultado["Agua"].append(dato_con_fecha_hora)
@@ -112,3 +114,20 @@ class MonitoreoControl:
     def obtener_enlaces(self):
         motas_activas = Mota.query.filter_by(estado=True).all()
         return [mota.enlace for mota in motas_activas if mota.enlace]
+
+
+    def desactivar_monitoreo(self, external):
+        monitoreo = Monitoreo.query.filter_by(external_id=external).first()
+        if monitoreo:
+            monitoreo.estado = False
+            db.session.commit()
+            return True
+        return False
+    
+    def activar_monitoreo(self, external):
+        monitoreo = Monitoreo.query.filter_by(external_id=external).first()
+        if monitoreo:
+            monitoreo.estado = True
+            db.session.commit()
+            return True
+        return False
