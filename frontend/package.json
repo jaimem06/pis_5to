@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
+    "@types/leaflet": "^1.9.12",
     "apexcharts": "^3.45.2",
     "axios": "^1.7.2",
     "flatpickr": "^4.6.13",

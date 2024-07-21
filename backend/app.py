@@ -44,43 +44,48 @@ def save_data(app):
     with app.app_context():
         from controllers.monitoreoControl import MonitoreoControl
         monitoreoControl = MonitoreoControl()
-        for _, data in sensor_data.items():
+        for enlace, data in sensor_data.items():
             try:
+                print(f"Guardando monitoreo para {enlace} con datos: {data}")
                 id_monitoreo = monitoreoControl.guardar_monitoreo(data)
                 print(f"Monitoreo guardado con id: {id_monitoreo}")
             except Exception as e:
                 print(f"Error al guardar monitoreo: {e}")
         sensor_data.clear()
-        data_published = True 
+        data_published = True
 
-def on_message(_, __, msg, app):
-    if not data_published:
-        try:
-            data = json.loads(msg.payload.decode())
-            sensor_enlace = msg.topic
-            with app.app_context():
-                from controllers.monitoreoControl import MonitoreoControl
-                monitoreoControl = MonitoreoControl()
-                if sensor_enlace in monitoreoControl.obtener_enlaces():
-                    sensor_data[sensor_enlace] = data
-                    print(f"Datos recibidos de {sensor_enlace}: {data}")
-                else:
-                    print(f"Datos ignorados de sensor inactivo: {sensor_enlace}")
-        except Exception as e:
-            print(f"Error: {e}")
+def on_message(client, userdata, msg):
+    global data_published
+    try:
+        data = json.loads(msg.payload.decode())
+        sensor_enlace = msg.topic
+        print(f"Mensaje recibido en {sensor_enlace} con payload: {data}")
+        with userdata['app'].app_context():
+            from controllers.monitoreoControl import MonitoreoControl
+            monitoreoControl = MonitoreoControl()
+            enlaces = monitoreoControl.obtener_enlaces()
+            print(f"Enlaces obtenidos: {enlaces}")
+            if sensor_enlace in enlaces:
+                sensor_data[sensor_enlace] = data
+                print(f"Datos recibidos de {sensor_enlace}: {data}")
+            else:
+                print(f"Datos ignorados de sensor inactivo: {sensor_enlace}")
+    except Exception as e:
+        print(f"Error procesando el mensaje: {e}")
+
 
 def publish_and_subscribe(app):
     global data_published
-    if data_published: 
-        return
+    data_published = False
 
     client = create_mqtt_client()
     if client is None:
         print("Error al crear el cliente MQTT.")
         return
 
-    client.on_message = lambda client, userdata, msg: on_message(client, userdata, msg, app)
-    
+    client.user_data_set({'app': app})
+    client.on_message = on_message
+
     retry_count = 0
     while not client.connected_flag and retry_count < 5:
         print("Esperando conexión...")
@@ -94,10 +99,13 @@ def publish_and_subscribe(app):
 
     client.loop_start()
     publish_solicitud_datos(client)
+    
     with app.app_context():
         from controllers.monitoreoControl import MonitoreoControl
         monitoreoControl = MonitoreoControl()
         topicos = monitoreoControl.obtener_enlaces()
+        print(f"Tópicos obtenidos: {topicos}")
+        
     for topico in topicos:
         client.subscribe(topico)
         print(f"Suscrito a {topico}")

@@ -15,14 +15,13 @@ def after_request_func(response):
         response.headers.add('Access-Control-Allow-Headers', 'x-csrf-token')
         response.headers.add('Access-Control-Allow-Headers', 'Accept')
         response.headers.add('Access-Control-Allow-Headers', 'X-Access-Tokens')
-        response.headers.add('Access-Control-Allow-Methods',
-        'GET, POST, OPTIONS, PUT, PATCH, DELETE')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
         if origin:
             response.headers.add('Access-Control-Allow-Origin', origin)
     else:
-            response.headers.add('Access-Control-Allow-Credentials', 'true')
-            if origin:
-                response.headers.add('Access-Control-Allow-Origin', origin)
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        if origin:
+            response.headers.add('Access-Control-Allow-Origin', origin)
     return response
 
 @app.errorhandler(400)

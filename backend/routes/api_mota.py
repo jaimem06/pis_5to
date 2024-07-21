@@ -53,6 +53,13 @@ def listarInactivo(estado=False):
         200,
     )
 
+@api_mota.route("/mota/ubicacion", methods=["GET"])
+@token_required
+def obtener_ubicacion():
+    ubicaciones = motaC.obtener_ubicacion()
+    return make_response(
+        jsonify({"msg": "OK", "code": 200, "datos": ubicaciones}), 200,
+    )
 
 # api para guardar mota
 @api_mota.route("/mota/guardar", methods=["POST"])

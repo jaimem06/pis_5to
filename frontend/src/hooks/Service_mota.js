@@ -65,3 +65,14 @@ export async function get_tipos(token){
     }
     return datos.data || [] ;
 }
+
+export async function get_ubicacion_motas(token){
+    let datos = null;
+    try {
+       datos = await GET('mota/ubicacion',token);
+    } catch (error) {
+       console.log(error.response.data);
+       return[];
+    }
+    return datos.data || [] ;
+}

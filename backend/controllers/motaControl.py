@@ -5,7 +5,6 @@ from cryptography.fernet import Fernet
 from app import db
 import uuid
 
-
 class MotaControl:
     clave = Fernet.generate_key()
     cifrador= Fernet(clave)
@@ -102,7 +101,11 @@ class MotaControl:
     def obtener_mota_external_id(self, external):
         return Mota.query.filter_by(external_id=external).first()
 
-
-
-                
-        
+    # Metodo para obtener ubicacion de motas
+    def obtener_ubicacion(self):
+        motas_activas = Mota.query.filter_by(estado=True).all()
+        ubicaciones = [
+            {'id': mota.id, 'latitud': mota.latitud, 'longitud': mota.longitud, 'tipo': mota.tipo.name}
+            for mota in motas_activas
+        ]
+        return ubicaciones

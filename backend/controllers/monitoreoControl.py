@@ -1,6 +1,7 @@
 from models.monitoreo import Monitoreo
 from models.mota import Mota
 from datetime import datetime
+from sqlalchemy.exc import SQLAlchemyError
 import pandas as pd
 import numpy as np
 import uuid
@@ -29,18 +30,34 @@ class MonitoreoControl:
 
     # Método para guardar monitoreo
     def guardar_monitoreo(self, data):
-        monitoreo = Monitoreo(
-            external_id=str(uuid.uuid4()),
-            dato=data['dato'],
-            fecha=datetime.now().date(),
-            hora=datetime.now().time(),
-            estado=data['estado'],
-            mota_id=1 if data['sensor'] == "Agua" else 2
-        )
-        
-        db.session.add(monitoreo)
-        db.session.commit()
-        return monitoreo.id
+            try:
+                # Verificar si ya existe un monitoreo con la misma fecha, hora y dato
+                existe_monitoreo = Monitoreo.query.filter_by(
+                    fecha=datetime.now().date(),
+                    hora=datetime.now().time(),
+                    dato=data['dato']
+                ).first()
+    
+                # Si ya existe un monitoreo, no guardar uno nuevo
+                if existe_monitoreo:
+                    print("Ya existe un monitoreo con la misma fecha, hora y dato.")
+                    return None
+    
+                monitoreo = Monitoreo(
+                    external_id=str(uuid.uuid4()),
+                    dato=data['dato'],
+                    fecha=datetime.now().date(),
+                    hora=datetime.now().time(),
+                    estado=data['estado'],
+                    mota_id=1 if data['sensor'] == "Agua" else 2
+                )
+                db.session.add(monitoreo)
+                db.session.commit()
+                return monitoreo.id
+            except SQLAlchemyError as e:
+                print(f"Error al guardar el monitoreo: {e}")
+                db.session.rollback()
+                return None
 
     # Método para obtener un monitoreo por external_id
     def obtener_monitoreo_external_id(self, external):

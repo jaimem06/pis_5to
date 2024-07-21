@@ -43,7 +43,7 @@ const GraficaSensores: React.FC = () => {
   };
 
   const handleProjectionStepsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newSteps = Math.min(Math.max(2, Number(e.target.value)), 730); // Limit to max 730 days
+    const newSteps = Math.min(Math.max(2, Number(e.target.value)), 730);
     setProjectionSteps(newSteps);
   };
 
@@ -67,7 +67,7 @@ const GraficaSensores: React.FC = () => {
         setProjectionSteps(differenceInDays);
       } else {
         console.error('La fecha seleccionada debe ser al menos 2 días en el futuro y no más de 2 años.');
-        setSelectedDate(''); // Reset the selected date if it's invalid
+        setSelectedDate(''); 
       }
     }
   };
@@ -120,13 +120,13 @@ const GraficaSensores: React.FC = () => {
     yaxis: [
       {
         title: {
-          text: 'Partes por millón',
+          text: 'Calidad del Agua (ppm) TDS',
         },
       },
       {
         opposite: true,
         title: {
-          text: 'Calidad del aire (AQI)',
+          text: 'Calidad del Aire (ppm)',
         },
       }
     ],
