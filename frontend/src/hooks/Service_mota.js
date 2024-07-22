@@ -51,7 +51,7 @@ export async function save_mota(data, token) {
         
     } catch (error) {
         console.error(error);
-        return null;
+        return error.response;
     }
  } 
  
