@@ -22,6 +22,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ zoom, onMapClick }) => {
       },
       () => {
         console.error('Acceso a la ubicación denegado por el usuario o no disponible.');
+        setHasLocation(true); // Mostrar el mapa aunque no se pueda acceder a la ubicación
       }
     );
   }, []);
